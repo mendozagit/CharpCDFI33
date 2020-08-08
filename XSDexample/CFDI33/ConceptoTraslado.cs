@@ -24,5 +24,6 @@ namespace XSDexample.CFDI33
 
         [XmlAttribute()]
         public decimal Importe { get; set; }
+        //teste
     }
 }
