@@ -8,7 +8,11 @@ namespace XSDexample.CFDI33
 {
     public class ComprobanteComplemento
     {
-       
+       /*
+        * Complementos de pago Cfdi V3.3
+    
+        */
+
 
 
     }
