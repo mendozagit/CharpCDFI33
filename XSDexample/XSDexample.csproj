@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CFDI33\CfdiRelacionado.cs" />
+    <Compile Include="CFDI33\cfdv33.cs" />
     <Compile Include="CFDI33\Comprobante.cs" />
     <Compile Include="CFDI33\ComprobanteAdenda.cs" />
     <Compile Include="CFDI33\ComprobanteComplemento.cs" />
@@ -93,6 +94,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Sat\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

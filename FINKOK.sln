@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29230.47
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FINKOK", "FINKOK\FINKOK.csproj", "{3A456DB9-3D83-4AC5-BE6C-155CA1ED245D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSDexample", "XSDexample\XSDexample.csproj", "{1AB86236-3E25-4DED-A7B2-6C0CCAB7481B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mensoft.Facturacion", "Mensoft.Facturacion\Mensoft.Facturacion.csproj", "{A5D49D05-AF83-4829-B9B3-B0562B25DF29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{3A456DB9-3D83-4AC5-BE6C-155CA1ED245D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A456DB9-3D83-4AC5-BE6C-155CA1ED245D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A456DB9-3D83-4AC5-BE6C-155CA1ED245D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1AB86236-3E25-4DED-A7B2-6C0CCAB7481B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1AB86236-3E25-4DED-A7B2-6C0CCAB7481B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1AB86236-3E25-4DED-A7B2-6C0CCAB7481B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1AB86236-3E25-4DED-A7B2-6C0CCAB7481B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5D49D05-AF83-4829-B9B3-B0562B25DF29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5D49D05-AF83-4829-B9B3-B0562B25DF29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5D49D05-AF83-4829-B9B3-B0562B25DF29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5D49D05-AF83-4829-B9B3-B0562B25DF29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
