@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Mensoft.Facturacion.CFDI33
 {
-    class ConceptoTraslado
+    public class ConceptoTraslado
     {
     }
 }
