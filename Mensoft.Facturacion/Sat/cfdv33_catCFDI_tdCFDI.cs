@@ -2033,7 +2033,9 @@ namespace Mensoft.Facturacion.Sat {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.sat.gob.mx/cfd/3")]
     public partial class ComprobanteConceptoCuentaPredial {
-        
+        /// <summary>
+        /// ok
+        /// </summary>
         private string numeroField;
         
         /// <remarks/>
