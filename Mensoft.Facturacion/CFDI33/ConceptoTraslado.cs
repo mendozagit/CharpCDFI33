@@ -5,9 +5,8 @@ using System.Xml.Serialization;
 
 namespace Mensoft.Facturacion.CFDI33
 {
-    public class ConceptoImpuesto
+    public class ConceptoTraslado
     {
-
         [XmlAttribute()]
         public decimal Base { get; set; }
 
@@ -27,7 +26,10 @@ namespace Mensoft.Facturacion.CFDI33
         [XmlAttribute()]
         public decimal Importe { get; set; }
 
+        [XmlIgnore()]
+        public bool TasaOCuotaSpecified { get; set; }
 
-     
+        [XmlIgnore()]
+        public bool ImporteSpecified { get; set; }
     }
 }

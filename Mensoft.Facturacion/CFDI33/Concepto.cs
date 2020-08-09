@@ -7,16 +7,19 @@ namespace Mensoft.Facturacion.CFDI33
 {
     public class Concepto
     {
-
-        public IList<ConceptoImpuesto> Impuestos { get; set; }
+        public IList<ConceptoInformacionAduanera> InformacionesAduanera { get; set; }
+        public IList<ConceptoTraslado> Traslados { get; set; }
+        public IList<ConceptoRetencion> Retenciones { get; set; }
 
         public Concepto()
         {
             InformacionesAduanera = new List<ConceptoInformacionAduanera>();
+            Traslados = new List<ConceptoTraslado>();
+            Retenciones = new List<ConceptoRetencion>();
 
         }
         [XmlElement("InformacionAduanera")]
-        public IList<ConceptoInformacionAduanera> InformacionesAduanera { get; set; }
+
 
         public ConceptoCuentaPredial CuentaPredial { get; set; }
 
