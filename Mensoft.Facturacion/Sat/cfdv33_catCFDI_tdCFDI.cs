@@ -2072,6 +2072,7 @@ namespace Mensoft.Facturacion.Sat {
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.sat.gob.mx/cfd/3")]
     public partial class ComprobanteConceptoParte {
         
+        //ok
         private ComprobanteConceptoParteInformacionAduanera[] informacionAduaneraField;
         
         private string claveProdServField;
