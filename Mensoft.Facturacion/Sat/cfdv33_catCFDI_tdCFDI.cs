@@ -1797,6 +1797,9 @@ namespace Mensoft.Facturacion.Sat {
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.sat.gob.mx/cfd/3")]
     public partial class ComprobanteConceptoImpuestosTraslado {
         
+        /// <summary>
+        /// ok
+        /// </summary>
         private decimal baseField;
         
         private c_Impuesto impuestoField;
@@ -1932,7 +1935,9 @@ namespace Mensoft.Facturacion.Sat {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.sat.gob.mx/cfd/3")]
     public partial class ComprobanteConceptoImpuestosRetencion {
-        
+        /// <summary>
+        /// ok
+        /// </summary>
         private decimal baseField;
         
         private c_Impuesto impuestoField;
