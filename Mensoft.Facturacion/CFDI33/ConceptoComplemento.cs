@@ -6,5 +6,6 @@ namespace Mensoft.Facturacion.CFDI33
 {
     public class ConceptoComplemento
     {
+
     }
 }

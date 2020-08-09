@@ -1887,6 +1887,7 @@ namespace Mensoft.Facturacion.Sat {
                 this.importeFieldSpecified = value;
             }
         }
+   
     }
     
     /// <remarks/>
@@ -2211,7 +2212,7 @@ namespace Mensoft.Facturacion.Sat {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.sat.gob.mx/cfd/3")]
     public partial class ComprobanteConceptoParteInformacionAduanera {
-        
+        //ok
         private string numeroPedimentoField;
         
         /// <remarks/>
