@@ -5,6 +5,9 @@ using System.Xml.Serialization;
 
 namespace Mensoft.Facturacion.CFDI33
 {
+    [Serializable()]
+    [XmlType(AnonymousType = true, Namespace = "http://www.sat.gob.mx/cfd/3")]
+    [XmlRoot(Namespace = "http://www.sat.gob.mx/cfd/3", IsNullable = false)]
     public class Comprobante
     {
         public Comprobante()
