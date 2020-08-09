@@ -1559,7 +1559,8 @@ namespace Mensoft.Facturacion.Sat {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.sat.gob.mx/cfd/3")]
-    public partial class ComprobanteConcepto {
+    public partial class ComprobanteConcepto 
+    {
         
         private ComprobanteConceptoImpuestos impuestosField;
         
