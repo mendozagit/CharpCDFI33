@@ -1,10 +1,12 @@
 ﻿using FINKOK.demo_facturacion;
+using Mensoft.Facturacion.CFDI33;
 using System;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
+
 
 namespace FINKOK
 {
@@ -17,6 +19,29 @@ namespace FINKOK
 
         private void Button1_Click(object sender, EventArgs e)
         {
+            var comprobante = new Comprobante();
+            var emisor = new Emisor();
+            var receptor = new Receptor();
+
+            var concepto = new Concepto();
+            var conceptoTraslado = new ConceptoTraslado();
+
+
+
+
+
+            emisor.Nombre = "JESUS MENDOZA JUAREZ";
+            emisor.RegimenFiscal = "621";
+            emisor.Rfc = "MEJJ940824C61";
+
+            receptor.Rfc = "ADA110907QWA";
+            receptor.Nombre = "OPERADORA KR, S.A. DE C.V";
+            receptor.UsoCFDI = "";
+
+
+
+
+
             //Instancias del timbrado
             StampSOAP selloSOAP = new StampSOAP();
             stamp oStamp = new stamp();

@@ -19,6 +19,7 @@ namespace Mensoft.Facturacion.CFDI33
             Retenciones = new List<ComprobanteRetencion>();
             Conceptos = new List<Concepto>();
 
+          
         }
 
 
