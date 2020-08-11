@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Mensoft.Facturacion.CFDI33
@@ -19,21 +20,20 @@ namespace Mensoft.Facturacion.CFDI33
             Retenciones = new List<ComprobanteRetencion>();
             Conceptos = new List<Concepto>();
 
-          
         }
 
 
-        public IList<CfdiRelacionado> CfdiRelacionados { get; set; }
+        public List<CfdiRelacionado> CfdiRelacionados { get; set; }
 
-        public IList<ComprobanteTraslado> Traslados { get; set; }
+        public List<ComprobanteTraslado> Traslados { get; set; }
 
-        public IList<ComprobanteRetencion> Retenciones { get; set; }
+        public List<ComprobanteRetencion> Retenciones { get; set; }
 
         [XmlArrayItem("Concepto", IsNullable = false)]
-        public IList<Concepto> Conceptos { get; set; }
+        public List<Concepto> Conceptos { get; set; }
 
         [XmlElement("Complemento")]
-        public IList<ComprobanteComplemento> Complementos { get; set; }
+        public List<ComprobanteComplemento> Complementos { get; set; }
 
         public Emisor Emisor { get; set; }
 
@@ -124,5 +124,7 @@ namespace Mensoft.Facturacion.CFDI33
 
         [XmlAttribute()]
         public string Confirmacion { get; set; }
+
+       
     }
 }

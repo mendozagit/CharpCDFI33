@@ -26,9 +26,8 @@ namespace FINKOK
             var concepto = new Concepto();
             var conceptoTraslado = new ConceptoTraslado();
 
-
-
-
+            var conceptotraslado = new ConceptoTraslado();
+            var comprobantetraslado = new ComprobanteTraslado();
 
             emisor.Nombre = "JESUS MENDOZA JUAREZ";
             emisor.RegimenFiscal = "621";
@@ -36,11 +35,50 @@ namespace FINKOK
 
             receptor.Rfc = "ADA110907QWA";
             receptor.Nombre = "OPERADORA KR, S.A. DE C.V";
-            receptor.UsoCFDI = "";
+            receptor.UsoCFDI = "P01";
+
+            /*llenar concepto*/
+            concepto.ClaveProdServ = "01010101";
+            concepto.NoIdentificacion = "PROD001";
+            concepto.Cantidad = 1;
+            concepto.ClaveUnidad = "H87";
+            concepto.Unidad = "PZ";
+            concepto.Descripcion = "Coca Cola 2.5 Litros";
+            concepto.ValorUnitario = 100;
+            concepto.Importe = 100;
+
+            /*llenar concepto traslado*/
+            conceptoTraslado.Base = 100;
+            conceptoTraslado.Impuesto = "002";
+            conceptoTraslado.TipoFactor = "Tasa";
+            conceptoTraslado.TasaOCuota = 0.160000m;
+            conceptotraslado.Importe = 16.000000m;
+
+            /*llenar comprobante traslado*/
+            comprobantetraslado.Impuesto = "002";
+            comprobantetraslado.TipoFactor = "Tasa";
+            comprobantetraslado.TasaOCuota = 0.160000m;
+            comprobantetraslado.Importe = 16.000000m;
 
 
+            comprobante.Fecha = DateTime.Now.ToString("AAAA-MM-DDThh:mm:ss");
+            comprobante.Sello = "MiCadenaDeSello";
+            comprobante.NoCertificado = "MiNoCertificado";
+            comprobante.Certificado = "MiCadenadeCertificado";
+            comprobante.SubTotal = 100;
+            comprobante.Moneda = "MXN";
+            comprobante.Total = 116;
+            comprobante.TipoDeComprobante = "I";
+            comprobante.LugarExpedicion = "38020";
+            comprobante.Emisor = emisor;
+            comprobante.Receptor = receptor;
+            concepto.Traslados.Add(conceptoTraslado);
+
+            comprobante.Conceptos.Add(concepto);
+            comprobante.Traslados.Add(comprobantetraslado);
 
 
+            Cfdi33Service.SaveToXml(comprobante, "FacturaXML.XML");
 
             //Instancias del timbrado
             StampSOAP selloSOAP = new StampSOAP();
@@ -49,7 +87,7 @@ namespace FINKOK
 
             //Cargas tu archivo xml
             XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.Load(@"FacturaXML");
+            xmlDocument.Load("FacturaXML");
 
             //Conviertes el archivo en byte
             byte[] byteXmlDocument = Encoding.UTF8.GetBytes(xmlDocument.OuterXml);

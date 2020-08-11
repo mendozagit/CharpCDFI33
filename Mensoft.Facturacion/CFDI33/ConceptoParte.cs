@@ -17,7 +17,7 @@ namespace Mensoft.Facturacion.CFDI33
         }
 
         [XmlElement("InformacionAduanera")]
-        public IList<ParteInformacionAduanera> InformacionAduanera { get; set; }
+        public List<ParteInformacionAduanera> InformacionAduanera { get; set; }
 
         [XmlAttribute()]
 

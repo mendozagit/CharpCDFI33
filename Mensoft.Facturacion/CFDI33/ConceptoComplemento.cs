@@ -13,6 +13,6 @@ namespace Mensoft.Facturacion.CFDI33
 
         [XmlAnyElement()]
 
-        public IList<XmlElement> Any { get; set; }
+        public List<XmlElement> Any { get; set; }
     }
 }
