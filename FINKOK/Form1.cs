@@ -26,6 +26,7 @@ namespace FINKOK
             var concepto = new Concepto();
             var conceptoTraslado = new ConceptoTraslado();
 
+            var conceptoImpuestos = new ConceptoImpuestos();
             var conceptotraslado = new ConceptoTraslado();
             var comprobantetraslado = new ComprobanteTraslado();
 
@@ -54,6 +55,8 @@ namespace FINKOK
             conceptoTraslado.TasaOCuota = 0.160000m;
             conceptotraslado.Importe = 16.000000m;
 
+            conceptoImpuestos.Traslados.Add(conceptoTraslado);
+
             /*llenar comprobante traslado*/
             comprobantetraslado.Impuesto = "002";
             comprobantetraslado.TipoFactor = "Tasa";
@@ -72,7 +75,7 @@ namespace FINKOK
             comprobante.LugarExpedicion = "38020";
             comprobante.Emisor = emisor;
             comprobante.Receptor = receptor;
-            concepto.Traslados.Add(conceptoTraslado);
+            concepto.Impuestos = conceptoImpuestos;
 
             comprobante.Conceptos.Add(concepto);
             comprobante.Traslados.Add(comprobantetraslado);

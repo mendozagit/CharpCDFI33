@@ -14,11 +14,11 @@ namespace Mensoft.Facturacion.CFDI33
         public Comprobante()
         {
             Version = "3.3";
-            Complementos = new List<ComprobanteComplemento>();
-            CfdiRelacionados = new List<CfdiRelacionado>();
-            Traslados = new List<ComprobanteTraslado>();
-            Retenciones = new List<ComprobanteRetencion>();
-            Conceptos = new List<Concepto>();
+            //Complementos = new List<ComprobanteComplemento>();
+            //CfdiRelacionados = new List<CfdiRelacionado>();
+            //Traslados = new List<ComprobanteTraslado>();
+            //Retenciones = new List<ComprobanteRetencion>();
+            //Conceptos = new List<Concepto>();
 
         }
 

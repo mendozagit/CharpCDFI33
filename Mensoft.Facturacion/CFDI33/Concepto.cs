@@ -9,18 +9,18 @@ namespace Mensoft.Facturacion.CFDI33
     [XmlType(AnonymousType = true, Namespace = "http://www.sat.gob.mx/cfd/3")]
     public class Concepto
     {
+        [XmlElement("InformacionAduanera")]
         public List<ConceptoInformacionAduanera> InformacionesAduanera { get; set; }
-        public List<ConceptoTraslado> Traslados { get; set; }
-        public List<ConceptoRetencion> Retenciones { get; set; }
+
+        //[XmlElement("Impuestos")]
+        public ConceptoImpuestos Impuestos { get; set; }
+
 
         public Concepto()
         {
-            InformacionesAduanera = new List<ConceptoInformacionAduanera>();
-            Traslados = new List<ConceptoTraslado>();
-            Retenciones = new List<ConceptoRetencion>();
-
+            InformacionesAduanera = null;
         }
-        [XmlElement("InformacionAduanera")]
+
 
 
         public ConceptoCuentaPredial CuentaPredial { get; set; }

@@ -51,6 +51,7 @@
     <Compile Include="CFDI33\Concepto.cs" />
     <Compile Include="CFDI33\ConceptoComplemento.cs" />
     <Compile Include="CFDI33\ConceptoCuentaPredial.cs" />
+    <Compile Include="CFDI33\ConceptoImpuestos.cs" />
     <Compile Include="CFDI33\ConceptoInformacionAduanera.cs" />
     <Compile Include="CFDI33\ConceptoParte.cs" />
     <Compile Include="CFDI33\ConceptoRetencion.cs" />
