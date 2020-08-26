@@ -41,26 +41,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CFDI33\Cfdi33Service.cs" />
-    <Compile Include="CFDI33\CfdiRelacionado.cs" />
-    <Compile Include="CFDI33\Comprobante.cs" />
-    <Compile Include="CFDI33\ComprobanteAddenda.cs" />
-    <Compile Include="CFDI33\ComprobanteComplemento.cs" />
-    <Compile Include="CFDI33\ComprobanteRetencion.cs" />
-    <Compile Include="CFDI33\ComprobanteTraslado.cs" />
-    <Compile Include="CFDI33\Concepto.cs" />
-    <Compile Include="CFDI33\ConceptoComplemento.cs" />
-    <Compile Include="CFDI33\ConceptoCuentaPredial.cs" />
-    <Compile Include="CFDI33\ConceptoImpuestos.cs" />
-    <Compile Include="CFDI33\ConceptoInformacionAduanera.cs" />
-    <Compile Include="CFDI33\ConceptoParte.cs" />
-    <Compile Include="CFDI33\ConceptoRetencion.cs" />
-    <Compile Include="CFDI33\ConceptoTraslado.cs" />
-    <Compile Include="CFDI33\Emisor.cs" />
-    <Compile Include="CFDI33\ParteInformacionAduanera.cs" />
-    <Compile Include="CFDI33\Receptor.cs" />
+    <Compile Include="CFDI33\CfdiService.cs" />
+    <Compile Include="CFDI33\Facturacion\ComprobanteComplemento.cs" />
+    <Compile Include="CFDI33\Facturacion\Comprobante.cs" />
+    <Compile Include="CFDI33\Facturacion\ComprobanteAddenda.cs" />
+    <Compile Include="CFDI33\Facturacion\ComprobanteCfdiRelacionados.cs" />
+    <Compile Include="CFDI33\Facturacion\ComprobanteCfdiRelacionadosCfdiRelacionado.cs" />
+    <Compile Include="CFDI33\Facturacion\ComprobanteConcepto.cs" />
+    <Compile Include="CFDI33\Facturacion\ComprobanteConceptoComplementoConcepto.cs" />
+    <Compile Include="CFDI33\Facturacion\ComprobanteConceptoCuentaPredial.cs" />
+    <Compile Include="CFDI33\Facturacion\ComprobanteConceptoImpuestos.cs" />
+    <Compile Include="CFDI33\Facturacion\ComprobanteConceptoImpuestosRetencion.cs" />
+    <Compile Include="CFDI33\Facturacion\ComprobanteConceptoImpuestosTraslado.cs" />
+    <Compile Include="CFDI33\Facturacion\ComprobanteConceptoInformacionAduanera.cs" />
+    <Compile Include="CFDI33\Facturacion\ComprobanteConceptoParte.cs" />
+    <Compile Include="CFDI33\Facturacion\ComprobanteConceptoParteInformacionAduanera.cs" />
+    <Compile Include="CFDI33\Facturacion\ComprobanteEmisor.cs" />
+    <Compile Include="CFDI33\Facturacion\ComprobanteImpuestos.cs" />
+    <Compile Include="CFDI33\Facturacion\ComprobanteImpuestosRetencion.cs" />
+    <Compile Include="CFDI33\Facturacion\ComprobanteImpuestosTraslado.cs" />
+    <Compile Include="CFDI33\Facturacion\ComprobanteReceptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sat\cfdv33_catCFDI_tdCFDI.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Sat\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

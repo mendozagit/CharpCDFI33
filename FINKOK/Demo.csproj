@@ -84,6 +84,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Sellos\cer.cer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Sellos\key.key">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Web References\demo_facturacion\Application.wsdl" />
     <None Include="Web References\demo_facturacion\get_pdfResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
@@ -141,6 +147,12 @@
       <Project>{B84FA4AD-08BC-4A41-9FFA-6B4A83BB8585}</Project>
       <Name>Mensoft.Facturacion</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Sellos\contrasena.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
