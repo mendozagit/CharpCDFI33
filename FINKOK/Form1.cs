@@ -25,6 +25,28 @@ namespace FINKOK
 
             try
             {
+
+                var certificado = new Certificate(@"C:\Dympos\FacturaElectronica\Certificados\DGE131017IP1\CSD_DGE131017IP1_20171115.cer");
+                var clavePrivada = new PrivateKey(@"C:\Dympos\FacturaElectronica\Certificados\DGE131017IP1\CSD_DGE131017IP1_20171115.key", "DGE131017", "SHA-256withRSA");
+                var cadenaO = new OriginalString(@"C:\Dympos\FacturaElectronica\Certificados\cadenaoriginal33\cadenaoriginal33.xslt");
+                var cfdiService = new CfdiService();
+
+                var fiel = new Fiel(certificado, clavePrivada);
+
+                //MessageBox.Show("SerialNumber" + certificado.SerialNumber());
+                //MessageBox.Show("GetSerialNumberString" + certificado.GetSerialNumberString());
+                //MessageBox.Show(" IssuerName" + certificado.IssuerName());
+                //MessageBox.Show("NotAfter" + certificado.NotAfter());
+                //MessageBox.Show("NotBefore" + certificado.NotBefore());
+                //MessageBox.Show("FriendlyName" + certificado.FriendlyName());
+                //MessageBox.Show("GetEffectiveDateString" + certificado.GetEffectiveDateString());
+                //MessageBox.Show("GetExpirationDateString" + certificado.GetExpirationDateString());
+                //MessageBox.Show("GetPublicKeyString" + certificado.GetPublicKeyString());
+                //MessageBox.Show("HasPrivateKey" + certificado.HasPrivateKey());
+                //MessageBox.Show("Subject" + certificado.Subject());
+                //MessageBox.Show("Verify" + certificado.Verify());
+                //MessageBox.Show("Version" + certificado.Version());
+
                 //Concepto 1
                 var concepto1 = new ComprobanteConcepto();
                 var conceptoimpuesotos1 = new ComprobanteConceptoImpuestos();
@@ -172,8 +194,8 @@ namespace FINKOK
 
                 comprobante.Fecha = DateTime.Now.ToString("AAAA-MM-DDThh:mm:ss");
                 comprobante.Sello = "MiCadenaDeSello";
-                comprobante.NoCertificado = "MiNoCertificado";
-                comprobante.Certificado = "MiCadenadeCertificado";
+                comprobante.NoCertificado = certificado.CertificateNumber();
+                comprobante.Certificado = certificado.CertificateBase64();
                 comprobante.SubTotal = 2269400;
                 comprobante.Moneda = "MXN";
                 comprobante.Total = 1436012;
@@ -196,10 +218,11 @@ namespace FINKOK
                 comprobanteImpuestos.Traslados[0] = comprobanteTraslado;
                 comprobanteImpuestos.Retenciones[0] = comprobanteRetencion;
 
+                //Sellar 
 
+                comprobante.Sello = fiel.PrivateKey.GenerateSignature(cadenaO.GetOriginalString("FacturaXML.XML"));
 
-
-                CfdiService.SaveToXml(comprobante, "FacturaXML.XML");
+                cfdiService.SaveToXml(comprobante, "FacturaXML.XML");
             }
             catch (Exception exception)
             {
@@ -207,7 +230,7 @@ namespace FINKOK
                 throw;
             }
 
-            return;
+
 
 
             //Instancias del timbrado
@@ -217,7 +240,7 @@ namespace FINKOK
 
             //Cargas tu archivo xml
             XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.Load("FacturaXML");
+            xmlDocument.Load("FacturaXML.XML");
 
             //Conviertes el archivo en byte
             byte[] byteXmlDocument = Encoding.UTF8.GetBytes(xmlDocument.OuterXml);

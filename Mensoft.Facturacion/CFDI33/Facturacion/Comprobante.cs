@@ -1,10 +1,13 @@
-﻿using Facturacion;
+﻿using System.Xml.Schema;
+using System.Xml.Serialization;
+using Facturacion;
 
 namespace Mensoft.Facturacion.CFDI33.Facturacion
 {
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://www.sat.gob.mx/cfd/3")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "http://www.sat.gob.mx/cfd/3", IsNullable = false)]
+    //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://www.sat.gob.mx/cfd/3")]
+    //[System.Xml.Serialization.XmlRootAttribute(Namespace = "http://www.sat.gob.mx/cfd/3", IsNullable = false)]
+
     public class Comprobante
     {
         private ComprobanteCfdiRelacionados cfdiRelacionadosField;
@@ -65,6 +68,8 @@ namespace Mensoft.Facturacion.CFDI33.Facturacion
 
         private string confirmacionField;
 
+        [XmlAttribute("schemaLocation", Namespace = XmlSchema.InstanceNamespace)]
+        public string XsiSchemaLocation = "http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd";
         public Comprobante()
         {
             versionField = "3.3";
