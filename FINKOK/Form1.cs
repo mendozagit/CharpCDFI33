@@ -219,7 +219,7 @@ namespace FINKOK
                 comprobanteImpuestos.Retenciones[0] = comprobanteRetencion;
                 comprobante.Impuestos = comprobanteImpuestos;
 
-                //Sellar 
+                //Sellar  
                 cfdiService.SaveToXml(comprobante, "FacturaXML.XML");
                 comprobante.Sello = fiel.PrivateKey.GenerateSignature(cadenaO.GetOriginalString("FacturaXML.XML"));
 
