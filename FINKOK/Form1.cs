@@ -176,7 +176,7 @@ namespace FINKOK
                 var emisor = new ComprobanteEmisor();
                 emisor.Nombre = "ESCUELA KEMPER URGATE SA DE CV";
                 emisor.RegimenFiscal = "601";
-                emisor.Rfc = "MEJJ940824C61";
+                emisor.Rfc = "EKU9003173C9";
 
 
                 //Receptor
@@ -217,9 +217,10 @@ namespace FINKOK
                 comprobanteImpuestos.Retenciones = new ComprobanteImpuestosRetencion[1];
                 comprobanteImpuestos.Traslados[0] = comprobanteTraslado;
                 comprobanteImpuestos.Retenciones[0] = comprobanteRetencion;
+                comprobante.Impuestos = comprobanteImpuestos;
 
                 //Sellar 
-
+                cfdiService.SaveToXml(comprobante, "FacturaXML.XML");
                 comprobante.Sello = fiel.PrivateKey.GenerateSignature(cadenaO.GetOriginalString("FacturaXML.XML"));
 
                 cfdiService.SaveToXml(comprobante, "FacturaXML.XML");
