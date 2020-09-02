@@ -26,8 +26,9 @@ namespace FINKOK
             try
             {
 
-                var certificado = new Certificate(@"C:\Dympos\FacturaElectronica\Certificados\DGE131017IP1\CSD_DGE131017IP1_20171115.cer");
-                var clavePrivada = new PrivateKey(@"C:\Dympos\FacturaElectronica\Certificados\DGE131017IP1\CSD_DGE131017IP1_20171115.key", "DGE131017", "SHA-256withRSA");
+
+                var certificado = new Certificate(@"C:\Users\PHILIPS-JESUSMENDOZA\source\repos\CharpCDFI33\FINKOK\bin\Debug\Sellos\cer.cer");
+                var clavePrivada = new PrivateKey(@"C:\Users\PHILIPS-JESUSMENDOZA\source\repos\CharpCDFI33\FINKOK\bin\Debug\Sellos\key.key", "12345678a", "SHA-256withRSA");
                 var cadenaO = new OriginalString(@"C:\Dympos\FacturaElectronica\Certificados\cadenaoriginal33\cadenaoriginal33.xslt");
                 var cfdiService = new CfdiService();
 
@@ -164,7 +165,7 @@ namespace FINKOK
                 concepto3.Impuestos = new ComprobanteConceptoImpuestos();
                 concepto3.Impuestos.Traslados = new ComprobanteConceptoImpuestosTraslado[1];
                 concepto3.Impuestos.Retenciones = new ComprobanteConceptoImpuestosRetencion[1];
-                concepto3.Impuestos.Traslados[0] = conceptoTraslado1;
+                concepto3.Impuestos.Traslados[0] = conceptoTraslado3;
                 concepto3.Impuestos.Retenciones[0] = conceptoretencion3;
 
                 concepto3.Parte = new ComprobanteConceptoParte[1];
@@ -188,11 +189,22 @@ namespace FINKOK
                 //Comprobante
                 var comprobante = new Comprobante();
                 var comprobanteImpuestos = new ComprobanteImpuestos();
-                var comprobanteTraslado = new ComprobanteImpuestosTraslado();
-                var comprobanteRetencion = new ComprobanteImpuestosRetencion();
+                var comprobanteTraslado1 = new ComprobanteImpuestosTraslado();
+                var comprobanteRetencion1 = new ComprobanteImpuestosRetencion();
+                var comprobanteRetencion2 = new ComprobanteImpuestosRetencion();
 
+                comprobanteTraslado1.Importe = 363104;
+                comprobanteTraslado1.Impuesto = "002";
+                comprobanteTraslado1.TipoFactor = "Tasa";
+                comprobanteTraslado1.TasaOCuota = 0.160000m;
 
-                comprobante.Fecha = DateTime.Now.ToString("AAAA-MM-DDThh:mm:ss");
+                comprobanteRetencion1.Impuesto = "002";
+                comprobanteRetencion1.Importe = 2720;
+
+                comprobanteRetencion2.Impuesto = "003";
+                comprobanteRetencion2.Importe = 1193772;
+
+                comprobante.Fecha = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
                 comprobante.Sello = "MiCadenaDeSello";
                 comprobante.NoCertificado = certificado.CertificateNumber();
                 comprobante.Certificado = certificado.CertificateBase64();
@@ -203,6 +215,8 @@ namespace FINKOK
                 comprobante.LugarExpedicion = "38020";
                 comprobante.TipoDeComprobante = "I";
                 comprobante.Serie = "F";
+                comprobante.FormaPago = "01";
+                comprobante.MetodoPago = "PUE";
 
                 comprobante.Emisor = emisor;
                 comprobante.Receptor = receptor;
@@ -214,9 +228,14 @@ namespace FINKOK
 
                 comprobanteImpuestos = new ComprobanteImpuestos();
                 comprobanteImpuestos.Traslados = new ComprobanteImpuestosTraslado[1];
-                comprobanteImpuestos.Retenciones = new ComprobanteImpuestosRetencion[1];
-                comprobanteImpuestos.Traslados[0] = comprobanteTraslado;
-                comprobanteImpuestos.Retenciones[0] = comprobanteRetencion;
+                comprobanteImpuestos.Retenciones = new ComprobanteImpuestosRetencion[2];
+                comprobanteImpuestos.Traslados[0] = comprobanteTraslado1;
+                comprobanteImpuestos.Retenciones[0] = comprobanteRetencion1;
+                comprobanteImpuestos.Retenciones[1] = comprobanteRetencion2;
+                comprobanteImpuestos.TotalImpuestosRetenidos = 1196492;
+                comprobanteImpuestos.TotalImpuestosTrasladados = 363104;
+                comprobanteImpuestos.TotalImpuestosTrasladadosSpecified = true;
+                comprobanteImpuestos.TotalImpuestosRetenidosSpecified = true;
                 comprobante.Impuestos = comprobanteImpuestos;
 
                 //Sellar  
