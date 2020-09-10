@@ -52,10 +52,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CFDI33\Fiel.cs" />
+    <Compile Include="CFDI33\Helper\CFDIHelper.cs" />
     <Compile Include="CFDI33\IFielFile.cs" />
     <Compile Include="CFDI33\OriginalString.cs" />
     <Compile Include="CFDI33\Certificate.cs" />
     <Compile Include="CFDI33\CfdiService.cs" />
+    <Compile Include="CFDI33\PAC\ComercioDigital.cs" />
+    <Compile Include="CFDI33\PAC\Ecodex.cs" />
+    <Compile Include="CFDI33\PAC\Finkok.cs" />
+    <Compile Include="CFDI33\PAC\IPAC.cs" />
+    <Compile Include="CFDI33\PAC\SolucionFactible.cs" />
+    <Compile Include="CFDI33\PAC\SWSapien.cs" />
     <Compile Include="CFDI33\PrivateKey.cs" />
     <Compile Include="CFDI33\Facturacion\ComprobanteComplemento.cs" />
     <Compile Include="CFDI33\Facturacion\Comprobante.cs" />

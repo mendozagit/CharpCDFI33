@@ -3,6 +3,7 @@ using Mensoft.Facturacion.CFDI33;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
@@ -22,7 +23,7 @@ namespace FINKOK
 
         private void Button1_Click(object sender, EventArgs e)
         {
-
+            var cfdiService = new CfdiService("I", "3.3");
             try
             {
 
@@ -30,7 +31,7 @@ namespace FINKOK
                 var certificado = new Certificate(@"C:\Users\PHILIPS-JESUSMENDOZA\source\repos\CharpCDFI33\FINKOK\bin\Debug\Sellos\cer.cer");
                 var clavePrivada = new PrivateKey(@"C:\Users\PHILIPS-JESUSMENDOZA\source\repos\CharpCDFI33\FINKOK\bin\Debug\Sellos\key.key", "12345678a", "SHA-256withRSA");
                 var cadenaO = new OriginalString(@"C:\Dympos\FacturaElectronica\Certificados\cadenaoriginal33\cadenaoriginal33.xslt");
-                var cfdiService = new CfdiService();
+
 
                 var fiel = new Fiel(certificado, clavePrivada);
 
@@ -189,14 +190,14 @@ namespace FINKOK
                 //Comprobante
                 var comprobante = new Comprobante();
                 var comprobanteImpuestos = new ComprobanteImpuestos();
-                var comprobanteTraslado1 = new ComprobanteImpuestosTraslado();
+                //var comprobanteTraslado1 = new ComprobanteImpuestosTraslado();
                 var comprobanteRetencion1 = new ComprobanteImpuestosRetencion();
                 var comprobanteRetencion2 = new ComprobanteImpuestosRetencion();
 
-                comprobanteTraslado1.Importe = 363104;
-                comprobanteTraslado1.Impuesto = "002";
-                comprobanteTraslado1.TipoFactor = "Tasa";
-                comprobanteTraslado1.TasaOCuota = 0.160000m;
+                //comprobanteTraslado1.Importe = 363104;
+                //comprobanteTraslado1.Impuesto = "002";
+                //comprobanteTraslado1.TipoFactor = "Tasa";
+                //comprobanteTraslado1.TasaOCuota = 0.160000m;
 
                 comprobanteRetencion1.Impuesto = "002";
                 comprobanteRetencion1.Importe = 2720;
@@ -229,7 +230,7 @@ namespace FINKOK
                 comprobanteImpuestos = new ComprobanteImpuestos();
                 comprobanteImpuestos.Traslados = new ComprobanteImpuestosTraslado[1];
                 comprobanteImpuestos.Retenciones = new ComprobanteImpuestosRetencion[2];
-                comprobanteImpuestos.Traslados[0] = comprobanteTraslado1;
+                //comprobanteImpuestos.Traslados[0] = comprobanteTraslado1;
                 comprobanteImpuestos.Retenciones[0] = comprobanteRetencion1;
                 comprobanteImpuestos.Retenciones[1] = comprobanteRetencion2;
                 comprobanteImpuestos.TotalImpuestosRetenidos = 1196492;
@@ -237,6 +238,48 @@ namespace FINKOK
                 comprobanteImpuestos.TotalImpuestosTrasladadosSpecified = true;
                 comprobanteImpuestos.TotalImpuestosRetenidosSpecified = true;
                 comprobante.Impuestos = comprobanteImpuestos;
+
+
+                //Test lista agrupada
+
+
+                List<ComprobanteConceptoImpuestosTraslado> traslados = new List<ComprobanteConceptoImpuestosTraslado>();
+
+                foreach (var c in comprobante.Conceptos)
+                {
+                    foreach (var t in c.Impuestos.Traslados.ToList())
+                    {
+                        traslados.Add(t);
+                    }
+                }
+
+                var result = from item in traslados
+                                 //  group item by item.ImpuestoId into g
+                             group item by new { item.Impuesto, item.TasaOCuota, item.TipoFactor }
+                    into g
+                             select new ComprobanteConceptoImpuestosTraslado()
+                             {
+                                 Impuesto = g.Key.Impuesto,
+                                 TasaOCuota = g.Key.TasaOCuota,
+                                 TipoFactor = g.Key.TipoFactor,
+                                 Base = g.Sum(x => x.Base),
+                                 Importe = g.Sum(x => x.Importe)
+                             };
+
+                List<ComprobanteImpuestosTraslado> cTraslados = new List<ComprobanteImpuestosTraslado>();
+                foreach (var conceptoTraslado in result)
+                {
+                    cTraslados.Add(new ComprobanteImpuestosTraslado
+                    {
+                        Impuesto = conceptoTraslado.Impuesto,
+                        TipoFactor = conceptoTraslado.TipoFactor,
+                        TasaOCuota = conceptoTraslado.TasaOCuota,
+                        Importe = conceptoTraslado.Importe
+                    });
+                }
+
+                comprobanteImpuestos.Traslados = cTraslados.ToArray();
+
 
                 //Sellar  
                 cfdiService.SaveToXml(comprobante, "FacturaXML.XML");
@@ -288,7 +331,27 @@ namespace FINKOK
 
             try
             {
+
+                var x = selloResponse.stampResult.Incidencias.Length;
+
+                if (selloResponse != null)
+                {
+                    if (selloResponse.stampResult != null)
+                    {
+                        if (selloResponse.stampResult.Incidencias != null)
+                        {
+                            if (selloResponse.stampResult.Incidencias.Length == 0)
+                            {
+
+                            }
+                        }
+                    }
+                }
+
                 MessageBox.Show("No se timbro el XML" + "\nCódigo de error: " + selloResponse.stampResult.Incidencias[0].CodigoError.ToString() + "\nMensaje: " + selloResponse.stampResult.Incidencias[0].MensajeIncidencia);
+
+
+
             }
             catch (Exception)
             {
@@ -298,6 +361,8 @@ namespace FINKOK
                 MessageBox.Show(selloResponse.stampResult.xml.ToString());
                 StreamWriter XMLL = new StreamWriter(url + "responsepruebas.xml");
                 XMLL.Write(selloResponse.stampResult.xml);
+                File.WriteAllText("FacturaXML.XML", selloResponse.stampResult.xml);
+
                 XMLL.Close();
             }
 
