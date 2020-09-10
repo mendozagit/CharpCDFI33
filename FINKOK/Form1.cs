@@ -24,274 +24,231 @@ namespace FINKOK
         private void Button1_Click(object sender, EventArgs e)
         {
             var cfdiService = new CfdiService("I", "3.3");
-            try
-            {
-
-
-                var certificado = new Certificate(@"C:\Users\PHILIPS-JESUSMENDOZA\source\repos\CharpCDFI33\FINKOK\bin\Debug\Sellos\cer.cer");
-                var clavePrivada = new PrivateKey(@"C:\Users\PHILIPS-JESUSMENDOZA\source\repos\CharpCDFI33\FINKOK\bin\Debug\Sellos\key.key", "12345678a", "SHA-256withRSA");
-                var cadenaO = new OriginalString(@"C:\Dympos\FacturaElectronica\Certificados\cadenaoriginal33\cadenaoriginal33.xslt");
-
-
-                var fiel = new Fiel(certificado, clavePrivada);
-
-                //MessageBox.Show("SerialNumber" + certificado.SerialNumber());
-                //MessageBox.Show("GetSerialNumberString" + certificado.GetSerialNumberString());
-                //MessageBox.Show(" IssuerName" + certificado.IssuerName());
-                //MessageBox.Show("NotAfter" + certificado.NotAfter());
-                //MessageBox.Show("NotBefore" + certificado.NotBefore());
-                //MessageBox.Show("FriendlyName" + certificado.FriendlyName());
-                //MessageBox.Show("GetEffectiveDateString" + certificado.GetEffectiveDateString());
-                //MessageBox.Show("GetExpirationDateString" + certificado.GetExpirationDateString());
-                //MessageBox.Show("GetPublicKeyString" + certificado.GetPublicKeyString());
-                //MessageBox.Show("HasPrivateKey" + certificado.HasPrivateKey());
-                //MessageBox.Show("Subject" + certificado.Subject());
-                //MessageBox.Show("Verify" + certificado.Verify());
-                //MessageBox.Show("Version" + certificado.Version());
-
-                //Concepto 1
-                var concepto1 = new ComprobanteConcepto();
-                var conceptoimpuesotos1 = new ComprobanteConceptoImpuestos();
-                var conceptoTraslado1 = new ComprobanteConceptoImpuestosTraslado();
-                var conceptoretencion1 = new ComprobanteConceptoImpuestosRetencion();
-                var conceptocuentapredial = new ComprobanteConceptoCuentaPredial();
-
-                concepto1.ClaveProdServ = "01010101";
-                concepto1.ClaveUnidad = "H87";
-                concepto1.NoIdentificacion = "P001";
-                concepto1.Unidad = "Tonelada";
-                concepto1.Descripcion = "Producto ACERO";
-                concepto1.Cantidad = 1.5M;
-                concepto1.ValorUnitario = 1500000;
-                concepto1.Importe = 2250000;
-
-                conceptoTraslado1.Base = 2250000;
-                conceptoTraslado1.Impuesto = "002";
-                conceptoTraslado1.TipoFactor = "Tasa";
-                conceptoTraslado1.TasaOCuota = 0.160000m;
-                conceptoTraslado1.Importe = 360000;
-
-                conceptoretencion1.Base = 2250000;
-                conceptoretencion1.Importe = 1192500;
-                conceptoretencion1.Impuesto = "003";
-                conceptoretencion1.TasaOCuota = 0.530000m;
-                conceptoretencion1.TipoFactor = "Tasa";
-
-                conceptocuentapredial.Numero = "51888";
-                concepto1.Impuestos = new ComprobanteConceptoImpuestos();
-                concepto1.Impuestos.Traslados = new ComprobanteConceptoImpuestosTraslado[1];
-                concepto1.Impuestos.Retenciones = new ComprobanteConceptoImpuestosRetencion[1];
-                concepto1.Impuestos.Traslados[0] = conceptoTraslado1;
-                concepto1.Impuestos.Retenciones[0] = conceptoretencion1;
-                concepto1.CuentaPredial = conceptocuentapredial;
 
 
 
-                //Concepto 2
-                var concepto2 = new ComprobanteConcepto();
-                var conceptoimpuesotos2 = new ComprobanteConceptoImpuestos();
-                var conceptoTraslado2 = new ComprobanteConceptoImpuestosTraslado();
-                var conceptoretencion2 = new ComprobanteConceptoImpuestosRetencion();
-                var conceptoInformacionAdu = new ComprobanteConceptoInformacionAduanera();
-
-                concepto2.ClaveProdServ = "01010101";
-                concepto2.ClaveUnidad = "H87";
-                concepto2.NoIdentificacion = "P001";
-                concepto2.Unidad = "Tonelada";
-                concepto2.Descripcion = "Producto ALUMINIO";
-                concepto2.Cantidad = 1.6M;
-                concepto2.ValorUnitario = 1500;
-                concepto2.Importe = 2400;
-
-                conceptoTraslado2.Base = 2400;
-                conceptoTraslado2.Impuesto = "002";
-                conceptoTraslado2.TipoFactor = "Tasa";
-                conceptoTraslado2.TasaOCuota = 0.160000m;
-                conceptoTraslado2.Importe = 384;
-
-                conceptoretencion2.Base = 2400;
-                conceptoretencion2.Importe = 1272;
-                conceptoretencion2.Impuesto = "003";
-                conceptoretencion2.TasaOCuota = 0.530000m;
-                conceptoretencion2.TipoFactor = "Tasa";
-
-                conceptoInformacionAdu.NumeroPedimento = "15  48  3009  0001234";
-
-                concepto2.Impuestos = new ComprobanteConceptoImpuestos();
-                concepto2.Impuestos.Traslados = new ComprobanteConceptoImpuestosTraslado[1];
-                concepto2.Impuestos.Retenciones = new ComprobanteConceptoImpuestosRetencion[1];
-                concepto2.InformacionAduanera = new ComprobanteConceptoInformacionAduanera[1];
-                concepto2.Impuestos.Traslados[0] = conceptoTraslado2;
-                concepto2.Impuestos.Retenciones[0] = conceptoretencion2;
-                concepto2.InformacionAduanera[0] = conceptoInformacionAdu;
+            var certificado = new Certificate(@"C:\Users\PHILIPS-JESUSMENDOZA\source\repos\CharpCDFI33\FINKOK\bin\Debug\Sellos\cer.cer");
+            var clavePrivada = new PrivateKey(@"C:\Users\PHILIPS-JESUSMENDOZA\source\repos\CharpCDFI33\FINKOK\bin\Debug\Sellos\key.key", "12345678a", "SHA-256withRSA");
+            var cadenaO = new OriginalString(@"C:\Dympos\FacturaElectronica\Certificados\cadenaoriginal33\cadenaoriginal33.xslt");
 
 
+            var fiel = new Fiel(certificado, clavePrivada);
 
-                //Concepto 3
-                var concepto3 = new ComprobanteConcepto();
-                var conceptoimpuesotos3 = new ComprobanteConceptoImpuestos();
-                var conceptoTraslado3 = new ComprobanteConceptoImpuestosTraslado();
-                var conceptoretencion3 = new ComprobanteConceptoImpuestosRetencion();
-                var conceptoparte = new ComprobanteConceptoParte();
+            //MessageBox.Show("SerialNumber" + certificado.SerialNumber());
+            //MessageBox.Show("GetSerialNumberString" + certificado.GetSerialNumberString());
+            //MessageBox.Show(" IssuerName" + certificado.IssuerName());
+            //MessageBox.Show("NotAfter" + certificado.NotAfter());
+            //MessageBox.Show("NotBefore" + certificado.NotBefore());
+            //MessageBox.Show("FriendlyName" + certificado.FriendlyName());
+            //MessageBox.Show("GetEffectiveDateString" + certificado.GetEffectiveDateString());
+            //MessageBox.Show("GetExpirationDateString" + certificado.GetExpirationDateString());
+            //MessageBox.Show("GetPublicKeyString" + certificado.GetPublicKeyString());
+            //MessageBox.Show("HasPrivateKey" + certificado.HasPrivateKey());
+            //MessageBox.Show("Subject" + certificado.Subject());
+            //MessageBox.Show("Verify" + certificado.Verify());
+            //MessageBox.Show("Version" + certificado.Version());
 
-                concepto3.ClaveProdServ = "01010101";
-                concepto3.ClaveUnidad = "H87";
-                concepto3.NoIdentificacion = "P003";
-                concepto3.Unidad = "Tonelada";
-                concepto3.Descripcion = "Producto ZAMAC";
-                concepto3.Cantidad = 1.7M;
-                concepto3.ValorUnitario = 10000;
-                concepto3.Importe = 17000;
+            //Concepto 1
+            var concepto1 = new ComprobanteConcepto();
+            var conceptoimpuesotos1 = new ComprobanteConceptoImpuestos();
+            var conceptoTraslado1 = new ComprobanteConceptoImpuestosTraslado();
+            var conceptoretencion1 = new ComprobanteConceptoImpuestosRetencion();
+            var conceptocuentapredial = new ComprobanteConceptoCuentaPredial();
 
-                conceptoTraslado3.Base = 17000;
-                conceptoTraslado3.Impuesto = "002";
-                conceptoTraslado3.TipoFactor = "Tasa";
-                conceptoTraslado3.TasaOCuota = 0.160000m;
-                conceptoTraslado3.Importe = 2720;
+            concepto1.ClaveProdServ = "01010101";
+            concepto1.ClaveUnidad = "H87";
+            concepto1.NoIdentificacion = "P001";
+            concepto1.Unidad = "Tonelada";
+            concepto1.Descripcion = "Producto ACERO";
+            concepto1.Cantidad = 1.5M;
+            concepto1.ValorUnitario = 1500000;
+            concepto1.Importe = 2250000;
 
-                conceptoretencion3.Base = 17000;
-                conceptoretencion3.Importe = 2720;
-                conceptoretencion3.Impuesto = "002";
-                conceptoretencion3.TasaOCuota = 0.160000m;
-                conceptoretencion3.TipoFactor = "Tasa";
+            conceptoTraslado1.Base = 2250000;
+            conceptoTraslado1.Impuesto = "002";
+            conceptoTraslado1.TipoFactor = "Tasa";
+            conceptoTraslado1.TasaOCuota = 0.160000m;
+            conceptoTraslado1.Importe = 360000;
 
-                conceptoparte.Cantidad = 1.0m;
-                conceptoparte.ClaveProdServ = "01010101";
-                conceptoparte.Descripcion = "Parte ejemplo";
-                conceptoparte.Importe = 1.00m;
-                conceptoparte.NoIdentificacion = "055155";
-                conceptoparte.Unidad = "1/2 TONELADA";
-                conceptoparte.ValorUnitario = 1m;
+            conceptoretencion1.Base = 2250000;
+            conceptoretencion1.Importe = 1192500;
+            conceptoretencion1.Impuesto = "003";
+            conceptoretencion1.TasaOCuota = 0.530000m;
+            conceptoretencion1.TipoFactor = "Tasa";
 
-                concepto3.Impuestos = new ComprobanteConceptoImpuestos();
-                concepto3.Impuestos.Traslados = new ComprobanteConceptoImpuestosTraslado[1];
-                concepto3.Impuestos.Retenciones = new ComprobanteConceptoImpuestosRetencion[1];
-                concepto3.Impuestos.Traslados[0] = conceptoTraslado3;
-                concepto3.Impuestos.Retenciones[0] = conceptoretencion3;
-
-                concepto3.Parte = new ComprobanteConceptoParte[1];
-                //concepto3.Parte = new ComprobanteConceptoParte[1];
-                concepto3.Parte[0] = conceptoparte;
-
-
-                //Emisor
-                var emisor = new ComprobanteEmisor();
-                emisor.Nombre = "ESCUELA KEMPER URGATE SA DE CV";
-                emisor.RegimenFiscal = "601";
-                emisor.Rfc = "EKU9003173C9";
+            conceptocuentapredial.Numero = "51888";
+            concepto1.Impuestos = new ComprobanteConceptoImpuestos();
+            concepto1.Impuestos.Traslados = new ComprobanteConceptoImpuestosTraslado[1];
+            concepto1.Impuestos.Retenciones = new ComprobanteConceptoImpuestosRetencion[1];
+            concepto1.Impuestos.Traslados[0] = conceptoTraslado1;
+            concepto1.Impuestos.Retenciones[0] = conceptoretencion1;
+            concepto1.CuentaPredial = conceptocuentapredial;
 
 
-                //Receptor
-                var receptor = new ComprobanteReceptor();
-                receptor.Rfc = "MEJJ940824C61";
-                receptor.Nombre = "JESUS MENDOZA JUAREZ";
-                receptor.UsoCFDI = "P01";
 
-                //Comprobante
-                var comprobante = new Comprobante();
-                var comprobanteImpuestos = new ComprobanteImpuestos();
-                //var comprobanteTraslado1 = new ComprobanteImpuestosTraslado();
-                var comprobanteRetencion1 = new ComprobanteImpuestosRetencion();
-                var comprobanteRetencion2 = new ComprobanteImpuestosRetencion();
+            //Concepto 2
+            var concepto2 = new ComprobanteConcepto();
+            var conceptoimpuesotos2 = new ComprobanteConceptoImpuestos();
+            var conceptoTraslado2 = new ComprobanteConceptoImpuestosTraslado();
+            var conceptoretencion2 = new ComprobanteConceptoImpuestosRetencion();
+            var conceptoInformacionAdu = new ComprobanteConceptoInformacionAduanera();
 
-                //comprobanteTraslado1.Importe = 363104;
-                //comprobanteTraslado1.Impuesto = "002";
-                //comprobanteTraslado1.TipoFactor = "Tasa";
-                //comprobanteTraslado1.TasaOCuota = 0.160000m;
+            concepto2.ClaveProdServ = "01010101";
+            concepto2.ClaveUnidad = "H87";
+            concepto2.NoIdentificacion = "P001";
+            concepto2.Unidad = "Tonelada";
+            concepto2.Descripcion = "Producto ALUMINIO";
+            concepto2.Cantidad = 1.6M;
+            concepto2.ValorUnitario = 1500;
+            concepto2.Importe = 2400;
 
-                comprobanteRetencion1.Impuesto = "002";
-                comprobanteRetencion1.Importe = 2720;
+            conceptoTraslado2.Base = 2400;
+            conceptoTraslado2.Impuesto = "002";
+            conceptoTraslado2.TipoFactor = "Tasa";
+            conceptoTraslado2.TasaOCuota = 0.160000m;
+            conceptoTraslado2.Importe = 384;
 
-                comprobanteRetencion2.Impuesto = "003";
-                comprobanteRetencion2.Importe = 1193772;
+            conceptoretencion2.Base = 2400;
+            conceptoretencion2.Importe = 1272;
+            conceptoretencion2.Impuesto = "003";
+            conceptoretencion2.TasaOCuota = 0.530000m;
+            conceptoretencion2.TipoFactor = "Tasa";
 
-                comprobante.Fecha = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
-                comprobante.Sello = "MiCadenaDeSello";
-                comprobante.NoCertificado = certificado.CertificateNumber();
-                comprobante.Certificado = certificado.CertificateBase64();
-                comprobante.SubTotal = 2269400;
-                comprobante.Moneda = "MXN";
-                comprobante.Total = 1436012;
-                comprobante.TipoDeComprobante = "I";
-                comprobante.LugarExpedicion = "38020";
-                comprobante.TipoDeComprobante = "I";
-                comprobante.Serie = "F";
-                comprobante.FormaPago = "01";
-                comprobante.MetodoPago = "PUE";
+            conceptoInformacionAdu.NumeroPedimento = "15  48  3009  0001234";
 
-                comprobante.Emisor = emisor;
-                comprobante.Receptor = receptor;
-
-                comprobante.Conceptos = new ComprobanteConcepto[3];
-                comprobante.Conceptos[0] = concepto1;
-                comprobante.Conceptos[1] = concepto2;
-                comprobante.Conceptos[2] = concepto3;
-
-                comprobanteImpuestos = new ComprobanteImpuestos();
-                comprobanteImpuestos.Traslados = new ComprobanteImpuestosTraslado[1];
-                comprobanteImpuestos.Retenciones = new ComprobanteImpuestosRetencion[2];
-                //comprobanteImpuestos.Traslados[0] = comprobanteTraslado1;
-                comprobanteImpuestos.Retenciones[0] = comprobanteRetencion1;
-                comprobanteImpuestos.Retenciones[1] = comprobanteRetencion2;
-                comprobanteImpuestos.TotalImpuestosRetenidos = 1196492;
-                comprobanteImpuestos.TotalImpuestosTrasladados = 363104;
-                comprobanteImpuestos.TotalImpuestosTrasladadosSpecified = true;
-                comprobanteImpuestos.TotalImpuestosRetenidosSpecified = true;
-                comprobante.Impuestos = comprobanteImpuestos;
+            concepto2.Impuestos = new ComprobanteConceptoImpuestos();
+            concepto2.Impuestos.Traslados = new ComprobanteConceptoImpuestosTraslado[1];
+            concepto2.Impuestos.Retenciones = new ComprobanteConceptoImpuestosRetencion[1];
+            concepto2.InformacionAduanera = new ComprobanteConceptoInformacionAduanera[1];
+            concepto2.Impuestos.Traslados[0] = conceptoTraslado2;
+            concepto2.Impuestos.Retenciones[0] = conceptoretencion2;
+            concepto2.InformacionAduanera[0] = conceptoInformacionAdu;
 
 
-                //Test lista agrupada
+
+            //Concepto 3
+            var concepto3 = new ComprobanteConcepto();
+            var conceptoimpuesotos3 = new ComprobanteConceptoImpuestos();
+            var conceptoTraslado3 = new ComprobanteConceptoImpuestosTraslado();
+            var conceptoretencion3 = new ComprobanteConceptoImpuestosRetencion();
+            var conceptoparte = new ComprobanteConceptoParte();
+
+            concepto3.ClaveProdServ = "01010101";
+            concepto3.ClaveUnidad = "H87";
+            concepto3.NoIdentificacion = "P003";
+            concepto3.Unidad = "Tonelada";
+            concepto3.Descripcion = "Producto ZAMAC";
+            concepto3.Cantidad = 1.7M;
+            concepto3.ValorUnitario = 10000;
+            concepto3.Importe = 17000;
+
+            conceptoTraslado3.Base = 17000;
+            conceptoTraslado3.Impuesto = "002";
+            conceptoTraslado3.TipoFactor = "Tasa";
+            conceptoTraslado3.TasaOCuota = 0.160000m;
+            conceptoTraslado3.Importe = 2720;
+
+            conceptoretencion3.Base = 17000;
+            conceptoretencion3.Importe = 2720;
+            conceptoretencion3.Impuesto = "002";
+            conceptoretencion3.TasaOCuota = 0.160000m;
+            conceptoretencion3.TipoFactor = "Tasa";
+
+            conceptoparte.Cantidad = 1.0m;
+            conceptoparte.ClaveProdServ = "01010101";
+            conceptoparte.Descripcion = "Parte ejemplo";
+            conceptoparte.Importe = 1.00m;
+            conceptoparte.NoIdentificacion = "055155";
+            conceptoparte.Unidad = "1/2 TONELADA";
+            conceptoparte.ValorUnitario = 1m;
+
+            concepto3.Impuestos = new ComprobanteConceptoImpuestos();
+            concepto3.Impuestos.Traslados = new ComprobanteConceptoImpuestosTraslado[1];
+            concepto3.Impuestos.Retenciones = new ComprobanteConceptoImpuestosRetencion[1];
+            concepto3.Impuestos.Traslados[0] = conceptoTraslado3;
+            concepto3.Impuestos.Retenciones[0] = conceptoretencion3;
+
+            concepto3.Parte = new ComprobanteConceptoParte[1];
+            //concepto3.Parte = new ComprobanteConceptoParte[1];
+            concepto3.Parte[0] = conceptoparte;
 
 
-                List<ComprobanteConceptoImpuestosTraslado> traslados = new List<ComprobanteConceptoImpuestosTraslado>();
-
-                foreach (var c in comprobante.Conceptos)
-                {
-                    foreach (var t in c.Impuestos.Traslados.ToList())
-                    {
-                        traslados.Add(t);
-                    }
-                }
-
-                var result = from item in traslados
-                                 //  group item by item.ImpuestoId into g
-                             group item by new { item.Impuesto, item.TasaOCuota, item.TipoFactor }
-                    into g
-                             select new ComprobanteConceptoImpuestosTraslado()
-                             {
-                                 Impuesto = g.Key.Impuesto,
-                                 TasaOCuota = g.Key.TasaOCuota,
-                                 TipoFactor = g.Key.TipoFactor,
-                                 Base = g.Sum(x => x.Base),
-                                 Importe = g.Sum(x => x.Importe)
-                             };
-
-                List<ComprobanteImpuestosTraslado> cTraslados = new List<ComprobanteImpuestosTraslado>();
-                foreach (var conceptoTraslado in result)
-                {
-                    cTraslados.Add(new ComprobanteImpuestosTraslado
-                    {
-                        Impuesto = conceptoTraslado.Impuesto,
-                        TipoFactor = conceptoTraslado.TipoFactor,
-                        TasaOCuota = conceptoTraslado.TasaOCuota,
-                        Importe = conceptoTraslado.Importe
-                    });
-                }
-
-                comprobanteImpuestos.Traslados = cTraslados.ToArray();
+            //Emisor
+            var emisor = new ComprobanteEmisor();
+            emisor.Nombre = "ESCUELA KEMPER URGATE SA DE CV";
+            emisor.RegimenFiscal = "601";
+            emisor.Rfc = "EKU9003173C9";
 
 
-                //Sellar  
-                cfdiService.SaveToXml(comprobante, "FacturaXML.XML");
-                comprobante.Sello = fiel.PrivateKey.GenerateSignature(cadenaO.GetOriginalString("FacturaXML.XML"));
+            //Receptor
+            var receptor = new ComprobanteReceptor();
+            receptor.Rfc = "MEJJ940824C61";
+            receptor.Nombre = "JESUS MENDOZA JUAREZ";
+            receptor.UsoCFDI = "P01";
 
-                cfdiService.SaveToXml(comprobante, "FacturaXML.XML");
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-                throw;
-            }
+            //Comprobante
+            var comprobante = new Comprobante();
+            var comprobanteImpuestos = new ComprobanteImpuestos();
+            var comprobanteTraslado1 = new ComprobanteImpuestosTraslado();
+            var comprobanteRetencion1 = new ComprobanteImpuestosRetencion();
+            var comprobanteRetencion2 = new ComprobanteImpuestosRetencion();
+
+            comprobanteTraslado1.Importe = 363104;
+            comprobanteTraslado1.Impuesto = "002";
+            comprobanteTraslado1.TipoFactor = "Tasa";
+            comprobanteTraslado1.TasaOCuota = 0.160000m;
+
+            comprobanteRetencion1.Impuesto = "002";
+            comprobanteRetencion1.Importe = 2720;
+
+            comprobanteRetencion2.Impuesto = "003";
+            comprobanteRetencion2.Importe = 1193772;
+
+            comprobante.Fecha = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
+            comprobante.Sello = "MiCadenaDeSello";
+            comprobante.NoCertificado = certificado.CertificateNumber();
+            comprobante.Certificado = certificado.CertificateBase64();
+            comprobante.SubTotal = 2269400;
+            comprobante.Moneda = "MXN";
+            comprobante.Total = 1436012;
+            comprobante.TipoDeComprobante = "I";
+            comprobante.LugarExpedicion = "38020";
+            comprobante.TipoDeComprobante = "I";
+            comprobante.Serie = "F";
+            comprobante.FormaPago = "01";
+            comprobante.MetodoPago = "PUE";
+
+            comprobante.Emisor = emisor;
+            comprobante.Receptor = receptor;
+
+            comprobante.Conceptos = new ComprobanteConcepto[3];
+            comprobante.Conceptos[0] = concepto1;
+            comprobante.Conceptos[1] = concepto2;
+            comprobante.Conceptos[2] = concepto3;
+
+            comprobanteImpuestos = new ComprobanteImpuestos();
+            comprobanteImpuestos.Traslados = new ComprobanteImpuestosTraslado[1];
+            comprobanteImpuestos.Retenciones = new ComprobanteImpuestosRetencion[2];
+            comprobanteImpuestos.Traslados[0] = comprobanteTraslado1;
+            comprobanteImpuestos.Retenciones[0] = comprobanteRetencion1;
+            comprobanteImpuestos.Retenciones[1] = comprobanteRetencion2;
+            comprobanteImpuestos.TotalImpuestosRetenidos = 1196492;
+            comprobanteImpuestos.TotalImpuestosTrasladados = 363104;
+            comprobanteImpuestos.TotalImpuestosTrasladadosSpecified = true;
+            comprobanteImpuestos.TotalImpuestosRetenidosSpecified = true;
+            comprobante.Impuestos = comprobanteImpuestos;
+
+
+
+
+            comprobante = cfdiService.CalculaComprobante(comprobante);
+
+            //Sellar  
+            cfdiService.SaveToXml(comprobante, "FacturaXML.XML");
+            comprobante.Sello = fiel.PrivateKey.GenerateSignature(cadenaO.GetOriginalString("FacturaXML.XML"));
+
+            cfdiService.SaveToXml(comprobante, "FacturaXML.XML");
+
 
 
 
@@ -342,28 +299,27 @@ namespace FINKOK
                         {
                             if (selloResponse.stampResult.Incidencias.Length == 0)
                             {
+                                //MessageBox.Show(selloResponse.stampResult.CodEstatus.ToString());
+                                //MessageBox.Show(selloResponse.stampResult.Fecha.ToString());
+                                //MessageBox.Show(selloResponse.stampResult.UUID.ToString());
+                                //MessageBox.Show(selloResponse.stampResult.xml.ToString());
+                                StreamWriter XMLL = new StreamWriter(url + "responsepruebas.xml");
+                                XMLL.Write(selloResponse.stampResult.xml);
+                                File.WriteAllText("FacturaXML.XML", selloResponse.stampResult.xml);
 
+                                XMLL.Close();
                             }
                         }
                     }
                 }
-
-                MessageBox.Show("No se timbro el XML" + "\nCódigo de error: " + selloResponse.stampResult.Incidencias[0].CodigoError.ToString() + "\nMensaje: " + selloResponse.stampResult.Incidencias[0].MensajeIncidencia);
 
 
 
             }
             catch (Exception)
             {
-                MessageBox.Show(selloResponse.stampResult.CodEstatus.ToString());
-                MessageBox.Show(selloResponse.stampResult.Fecha.ToString());
-                MessageBox.Show(selloResponse.stampResult.UUID.ToString());
-                MessageBox.Show(selloResponse.stampResult.xml.ToString());
-                StreamWriter XMLL = new StreamWriter(url + "responsepruebas.xml");
-                XMLL.Write(selloResponse.stampResult.xml);
-                File.WriteAllText("FacturaXML.XML", selloResponse.stampResult.xml);
+                MessageBox.Show("No se timbro el XML" + "\nCódigo de error: " + selloResponse.stampResult.Incidencias[0].CodigoError.ToString() + "\nMensaje: " + selloResponse.stampResult.Incidencias[0].MensajeIncidencia);
 
-                XMLL.Close();
             }
 
         }

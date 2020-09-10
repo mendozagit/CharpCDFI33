@@ -12,24 +12,23 @@ namespace Mensoft.Facturacion.CFDI33
     {
 
         //Serializacion
-        private readonly XmlSerializerNamespaces namespaces;
+        private XmlSerializerNamespaces namespaces;
         private XmlSerializer xmlSerializer;
         private XmlWriter xmlWriter;
         private XmlReader xmlReader;
 
         //Comprobante 
-        private readonly Comprobante comprobante;
+        private Comprobante comprobante;
         private List<ComprobanteImpuestosTraslado> comprobanteTraslados;
         private List<ComprobanteImpuestosRetencion> comprobanteRetenciones;
 
         //Concepto
-
-        private readonly List<ComprobanteConcepto> conceptos;
+        private List<ComprobanteConcepto> conceptos;
         private ComprobanteConceptoImpuestosTraslado conceptoTraslado;
-        //private List<ComprobanteConceptoImpuestosTraslado> conceptoTraslados;
-        private ComprobanteConceptoImpuestosRetencion conceptoRetencion;
 
-        private List<ComprobanteConceptoImpuestosRetencion> conceptoRetenciones;
+
+
+
 
 
         #region Constructores
@@ -42,8 +41,8 @@ namespace Mensoft.Facturacion.CFDI33
             comprobante = new Comprobante { Version = version, TipoDeComprobante = tipoDeComprobante };
 
             conceptos = new List<ComprobanteConcepto>();
-            conceptoTraslados = new List<ComprobanteConceptoImpuestosTraslado>();
-            conceptoRetenciones = new List<ComprobanteConceptoImpuestosRetencion>();
+
+
             comprobanteTraslados = new List<ComprobanteImpuestosTraslado>();
             comprobanteRetenciones = new List<ComprobanteImpuestosRetencion>();
         }
@@ -84,7 +83,6 @@ namespace Mensoft.Facturacion.CFDI33
                 pconcepto.Impuestos.Traslados = new ComprobanteConceptoImpuestosTraslado[1];
                 pconcepto.Impuestos.Traslados[0] = conceptoTraslado;
                 conceptos.Add(pconcepto);
-
             }
             else
             {
@@ -99,10 +97,107 @@ namespace Mensoft.Facturacion.CFDI33
 
         }
 
-        public void CalculaComprobante()
+        public Comprobante CalculaComprobante(Comprobante pComprobante)
         {
+            this.comprobante = pComprobante;
 
-            comprobante.Conceptos = conceptos.ToArray();
+
+            #region Agrupacion de traslados
+            //Agrupacion de traslados
+            var traslados = new List<ComprobanteConceptoImpuestosTraslado>();
+
+            //Obtener todos los traslados de todos los conceptos
+            foreach (var c in pComprobante.Conceptos)
+            {
+                foreach (var t in c.Impuestos.Traslados.ToList())
+                {
+                    traslados.Add(t);
+                }
+            }
+
+            //Agrupar traslados por:  Impuesto, TasaOCuota, TipoFactor
+            var trasladosAgrupados = from item in traslados
+                                     group item by new { item.Impuesto, item.TasaOCuota, item.TipoFactor }
+                into g
+                                     select new ComprobanteConceptoImpuestosTraslado()
+                                     {
+                                         Impuesto = g.Key.Impuesto,
+                                         TasaOCuota = g.Key.TasaOCuota,
+                                         TipoFactor = g.Key.TipoFactor,
+                                         Base = g.Sum(x => x.Base),
+                                         Importe = g.Sum(x => x.Importe)
+                                     };
+
+
+            var agrupados = trasladosAgrupados.ToList();
+            foreach (var trasladosAgrupado in agrupados)
+            {
+                comprobanteTraslados.Add(new ComprobanteImpuestosTraslado
+                {
+                    Impuesto = trasladosAgrupado.Impuesto,
+                    TipoFactor = trasladosAgrupado.TipoFactor,
+                    TasaOCuota = trasladosAgrupado.TasaOCuota,
+                    Importe = trasladosAgrupado.Importe
+                });
+            }
+
+            pComprobante.Impuestos.Traslados = comprobanteTraslados.ToArray();
+            pComprobante.Impuestos.TotalImpuestosTrasladados = agrupados.Sum(x => x.Importe);
+
+            if (comprobanteTraslados.Count == 0)
+                pComprobante.Impuestos.TotalImpuestosTrasladadosSpecified = false;
+            #endregion
+
+
+            #region Agrupacion de retenciones
+
+
+
+
+            //Agrupacion de retenciones
+            var retenciones = new List<ComprobanteConceptoImpuestosRetencion>();
+
+            //Obtener todos los traslados de todos los conceptos
+            foreach (var c in pComprobante.Conceptos)
+            {
+                foreach (var t in c.Impuestos.Retenciones.ToList())
+                {
+                    retenciones.Add(t);
+                }
+            }
+
+            //Agrupar traslados por:  Impuesto, TasaOCuota, TipoFactor
+            var retencionesAgrupados = from item in retenciones
+                                       group item by new { item.Impuesto, item.TasaOCuota, item.TipoFactor }
+                into g
+                                       select new ComprobanteConceptoImpuestosRetencion()
+                                       {
+                                           Impuesto = g.Key.Impuesto,
+                                           TasaOCuota = g.Key.TasaOCuota,
+                                           TipoFactor = g.Key.TipoFactor,
+                                           Base = g.Sum(x => x.Base),
+                                           Importe = g.Sum(x => x.Importe)
+                                       };
+
+
+            var retencionesagrupadas = retencionesAgrupados.ToList();
+            foreach (var retencionAgrupada in retencionesagrupadas)
+            {
+                comprobanteRetenciones.Add(new ComprobanteImpuestosRetencion
+                {
+                    Impuesto = retencionAgrupada.Impuesto,
+                    Importe = retencionAgrupada.Importe
+                });
+            }
+
+            pComprobante.Impuestos.Retenciones = comprobanteRetenciones.ToArray();
+            pComprobante.Impuestos.TotalImpuestosRetenidos = retencionesagrupadas.Sum(x => x.Importe);
+
+            if (comprobanteRetenciones.Count == 0)
+                pComprobante.Impuestos.TotalImpuestosRetenidosSpecified = false;
+            #endregion
+
+            return pComprobante;
         }
 
         #region Serializar - Deserializar
