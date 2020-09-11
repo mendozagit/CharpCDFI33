@@ -23,37 +23,41 @@ namespace FINKOK
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            var cfdiService = new CfdiService("I", "3.3");
 
 
 
             var certificado = new Certificate(@"C:\Users\PHILIPS-JESUSMENDOZA\source\repos\CharpCDFI33\FINKOK\bin\Debug\Sellos\cer.cer");
             var clavePrivada = new PrivateKey(@"C:\Users\PHILIPS-JESUSMENDOZA\source\repos\CharpCDFI33\FINKOK\bin\Debug\Sellos\key.key", "12345678a", "SHA-256withRSA");
             var cadenaO = new OriginalString(@"C:\Dympos\FacturaElectronica\Certificados\cadenaoriginal33\cadenaoriginal33.xslt");
-
-
             var fiel = new Fiel(certificado, clavePrivada);
+            var cfdiService = new CfdiService("I", "3.3");
 
-            //MessageBox.Show("SerialNumber" + certificado.SerialNumber());
-            //MessageBox.Show("GetSerialNumberString" + certificado.GetSerialNumberString());
-            //MessageBox.Show(" IssuerName" + certificado.IssuerName());
-            //MessageBox.Show("NotAfter" + certificado.NotAfter());
-            //MessageBox.Show("NotBefore" + certificado.NotBefore());
-            //MessageBox.Show("FriendlyName" + certificado.FriendlyName());
-            //MessageBox.Show("GetEffectiveDateString" + certificado.GetEffectiveDateString());
-            //MessageBox.Show("GetExpirationDateString" + certificado.GetExpirationDateString());
-            //MessageBox.Show("GetPublicKeyString" + certificado.GetPublicKeyString());
-            //MessageBox.Show("HasPrivateKey" + certificado.HasPrivateKey());
-            //MessageBox.Show("Subject" + certificado.Subject());
-            //MessageBox.Show("Verify" + certificado.Verify());
-            //MessageBox.Show("Version" + certificado.Version());
+
+
+
+            cfdiService.Comprobante.Fecha = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
+            cfdiService.Comprobante.Sello = "MiCadenaDeSello";
+            cfdiService.Comprobante.NoCertificado = certificado.CertificateNumber();
+            cfdiService.Comprobante.Certificado = certificado.CertificateBase64();
+            cfdiService.Comprobante.SubTotal = 2269400;
+            cfdiService.Comprobante.Moneda = "MXN";
+            cfdiService.Comprobante.Descuento = 30;
+            cfdiService.Comprobante.Total = 1436012 - 30;
+            cfdiService.Comprobante.TipoDeComprobante = "I";
+            cfdiService.Comprobante.LugarExpedicion = "38020";
+            cfdiService.Comprobante.TipoDeComprobante = "I";
+            cfdiService.Comprobante.Serie = "F";
+            cfdiService.Comprobante.FormaPago = "01";
+            cfdiService.Comprobante.MetodoPago = "PUE";
+
 
             //Concepto 1
             var concepto1 = new ComprobanteConcepto();
-            var conceptoimpuesotos1 = new ComprobanteConceptoImpuestos();
+
             var conceptoTraslado1 = new ComprobanteConceptoImpuestosTraslado();
             var conceptoretencion1 = new ComprobanteConceptoImpuestosRetencion();
             var conceptocuentapredial = new ComprobanteConceptoCuentaPredial();
+
 
             concepto1.ClaveProdServ = "01010101";
             concepto1.ClaveUnidad = "H87";
@@ -62,36 +66,53 @@ namespace FINKOK
             concepto1.Descripcion = "Producto ACERO";
             concepto1.Cantidad = 1.5M;
             concepto1.ValorUnitario = 1500000;
+            concepto1.Descuento = 10; //***********************************************
             concepto1.Importe = 2250000;
 
-            conceptoTraslado1.Base = 2250000;
-            conceptoTraslado1.Impuesto = "002";
-            conceptoTraslado1.TipoFactor = "Tasa";
-            conceptoTraslado1.TasaOCuota = 0.160000m;
-            conceptoTraslado1.Importe = 360000;
 
-            conceptoretencion1.Base = 2250000;
-            conceptoretencion1.Importe = 1192500;
-            conceptoretencion1.Impuesto = "003";
-            conceptoretencion1.TasaOCuota = 0.530000m;
-            conceptoretencion1.TipoFactor = "Tasa";
 
-            conceptocuentapredial.Numero = "51888";
-            concepto1.Impuestos = new ComprobanteConceptoImpuestos();
-            concepto1.Impuestos.Traslados = new ComprobanteConceptoImpuestosTraslado[1];
-            concepto1.Impuestos.Retenciones = new ComprobanteConceptoImpuestosRetencion[1];
-            concepto1.Impuestos.Traslados[0] = conceptoTraslado1;
-            concepto1.Impuestos.Retenciones[0] = conceptoretencion1;
-            concepto1.CuentaPredial = conceptocuentapredial;
+            //conceptoTraslado1.Base = 2250000;
+            //conceptoTraslado1.Impuesto = "002";
+            //conceptoTraslado1.TipoFactor = "Tasa";
+            //conceptoTraslado1.TasaOCuota = 0.160000m;
+            //conceptoTraslado1.Importe = 360000;
 
+            //conceptoretencion1.Base = 2250000;
+            //conceptoretencion1.Importe = 1192500;
+            //conceptoretencion1.Impuesto = "003";
+            //conceptoretencion1.TasaOCuota = 0.530000m;
+            //conceptoretencion1.TipoFactor = "Tasa";
+
+
+            cfdiService.AddConcepto(concepto1, "002", 0.160000m, 2250000, 360000, "Tasa", "003", 0.530000m, 2250000, 1192500, "Tasa");
+            //conceptocuentapredial.Numero = "51888";
+            //concepto1.CuentaPredial = conceptocuentapredial;
+
+
+            //var t1 = new List<ComprobanteConceptoImpuestosTraslado>();
+            //var r1 = new List<ComprobanteConceptoImpuestosRetencion>();
+
+            //t1.Add(conceptoTraslado1);
+            //r1.Add(conceptoretencion1);
+            //cfdiService.AddConcepto(concepto1, t1, r1);
+            //cfdiService.AddConcepto(concepto1);
+
+
+
+
+            //concepto1.Impuestos = new ComprobanteConceptoImpuestos();
+            //concepto1.Impuestos.Traslados = new ComprobanteConceptoImpuestosTraslado[1];
+            //concepto1.Impuestos.Retenciones = new ComprobanteConceptoImpuestosRetencion[1];
+            //concepto1.Impuestos.Traslados[0] = conceptoTraslado1;
+            //concepto1.Impuestos.Retenciones[0] = conceptoretencion1;
 
 
             //Concepto 2
             var concepto2 = new ComprobanteConcepto();
-            var conceptoimpuesotos2 = new ComprobanteConceptoImpuestos();
-            var conceptoTraslado2 = new ComprobanteConceptoImpuestosTraslado();
-            var conceptoretencion2 = new ComprobanteConceptoImpuestosRetencion();
-            var conceptoInformacionAdu = new ComprobanteConceptoInformacionAduanera();
+            // var conceptoimpuesotos2 = new ComprobanteConceptoImpuestos();
+            //var conceptoTraslado2 = new ComprobanteConceptoImpuestosTraslado();
+            //var conceptoretencion2 = new ComprobanteConceptoImpuestosRetencion();
+            // var conceptoInformacionAdu = new ComprobanteConceptoInformacionAduanera();
 
             concepto2.ClaveProdServ = "01010101";
             concepto2.ClaveUnidad = "H87";
@@ -100,38 +121,48 @@ namespace FINKOK
             concepto2.Descripcion = "Producto ALUMINIO";
             concepto2.Cantidad = 1.6M;
             concepto2.ValorUnitario = 1500;
+            concepto2.Descuento = 10; //***********************************************
             concepto2.Importe = 2400;
 
-            conceptoTraslado2.Base = 2400;
-            conceptoTraslado2.Impuesto = "002";
-            conceptoTraslado2.TipoFactor = "Tasa";
-            conceptoTraslado2.TasaOCuota = 0.160000m;
-            conceptoTraslado2.Importe = 384;
+            //conceptoTraslado2.Base = 2400;
+            //conceptoTraslado2.Impuesto = "002";
+            //conceptoTraslado2.TipoFactor = "Tasa";
+            //conceptoTraslado2.TasaOCuota = 0.160000m;
+            //conceptoTraslado2.Importe = 384;
 
-            conceptoretencion2.Base = 2400;
-            conceptoretencion2.Importe = 1272;
-            conceptoretencion2.Impuesto = "003";
-            conceptoretencion2.TasaOCuota = 0.530000m;
-            conceptoretencion2.TipoFactor = "Tasa";
+            //conceptoretencion2.Base = 2400;
+            //conceptoretencion2.Importe = 1272;
+            //conceptoretencion2.Impuesto = "003";
+            //conceptoretencion2.TasaOCuota = 0.530000m;
+            //conceptoretencion2.TipoFactor = "Tasa";
 
-            conceptoInformacionAdu.NumeroPedimento = "15  48  3009  0001234";
+            // conceptoInformacionAdu.NumeroPedimento = "15  48  3009  0001234";
 
-            concepto2.Impuestos = new ComprobanteConceptoImpuestos();
-            concepto2.Impuestos.Traslados = new ComprobanteConceptoImpuestosTraslado[1];
-            concepto2.Impuestos.Retenciones = new ComprobanteConceptoImpuestosRetencion[1];
-            concepto2.InformacionAduanera = new ComprobanteConceptoInformacionAduanera[1];
-            concepto2.Impuestos.Traslados[0] = conceptoTraslado2;
-            concepto2.Impuestos.Retenciones[0] = conceptoretencion2;
-            concepto2.InformacionAduanera[0] = conceptoInformacionAdu;
+
+            //var t2 = new List<ComprobanteConceptoImpuestosTraslado>();
+            //var r2 = new List<ComprobanteConceptoImpuestosRetencion>();
+
+            //t2.Add(conceptoTraslado2);
+            //r2.Add(conceptoretencion2);
+            //cfdiService.AddConcepto(concepto2, t2, r2);
+            cfdiService.AddConcepto(concepto2, "002", 0.160000m, 2400, 384, "Tasa", "003", 0.530000m, 2400, 1272, "Tasa");
+
+            //concepto2.Impuestos = new ComprobanteConceptoImpuestos();
+            //concepto2.Impuestos.Traslados = new ComprobanteConceptoImpuestosTraslado[1];
+            //concepto2.Impuestos.Retenciones = new ComprobanteConceptoImpuestosRetencion[1];
+            //concepto2.InformacionAduanera = new ComprobanteConceptoInformacionAduanera[1];
+            //concepto2.Impuestos.Traslados[0] = conceptoTraslado2;
+            //concepto2.Impuestos.Retenciones[0] = conceptoretencion2;
+            //concepto2.InformacionAduanera[0] = conceptoInformacionAdu;
 
 
 
             //Concepto 3
             var concepto3 = new ComprobanteConcepto();
-            var conceptoimpuesotos3 = new ComprobanteConceptoImpuestos();
-            var conceptoTraslado3 = new ComprobanteConceptoImpuestosTraslado();
-            var conceptoretencion3 = new ComprobanteConceptoImpuestosRetencion();
-            var conceptoparte = new ComprobanteConceptoParte();
+            //var conceptoimpuesotos3 = new ComprobanteConceptoImpuestos();
+            //var conceptoTraslado3 = new ComprobanteConceptoImpuestosTraslado();
+            //var conceptoretencion3 = new ComprobanteConceptoImpuestosRetencion();
+            //var conceptoparte = new ComprobanteConceptoParte();
 
             concepto3.ClaveProdServ = "01010101";
             concepto3.ClaveUnidad = "H87";
@@ -140,114 +171,74 @@ namespace FINKOK
             concepto3.Descripcion = "Producto ZAMAC";
             concepto3.Cantidad = 1.7M;
             concepto3.ValorUnitario = 10000;
+            concepto3.Descuento = 10; //***********************************************
             concepto3.Importe = 17000;
 
-            conceptoTraslado3.Base = 17000;
-            conceptoTraslado3.Impuesto = "002";
-            conceptoTraslado3.TipoFactor = "Tasa";
-            conceptoTraslado3.TasaOCuota = 0.160000m;
-            conceptoTraslado3.Importe = 2720;
-
-            conceptoretencion3.Base = 17000;
-            conceptoretencion3.Importe = 2720;
-            conceptoretencion3.Impuesto = "002";
-            conceptoretencion3.TasaOCuota = 0.160000m;
-            conceptoretencion3.TipoFactor = "Tasa";
-
-            conceptoparte.Cantidad = 1.0m;
-            conceptoparte.ClaveProdServ = "01010101";
-            conceptoparte.Descripcion = "Parte ejemplo";
-            conceptoparte.Importe = 1.00m;
-            conceptoparte.NoIdentificacion = "055155";
-            conceptoparte.Unidad = "1/2 TONELADA";
-            conceptoparte.ValorUnitario = 1m;
-
-            concepto3.Impuestos = new ComprobanteConceptoImpuestos();
-            concepto3.Impuestos.Traslados = new ComprobanteConceptoImpuestosTraslado[1];
-            concepto3.Impuestos.Retenciones = new ComprobanteConceptoImpuestosRetencion[1];
-            concepto3.Impuestos.Traslados[0] = conceptoTraslado3;
-            concepto3.Impuestos.Retenciones[0] = conceptoretencion3;
-
-            concepto3.Parte = new ComprobanteConceptoParte[1];
+            //conceptoparte.Cantidad = 1.0m;
+            //conceptoparte.ClaveProdServ = "01010101";
+            //conceptoparte.Descripcion = "Parte ejemplo";
+            //conceptoparte.Importe = 1.00m;
+            //conceptoparte.NoIdentificacion = "055155";
+            //conceptoparte.Unidad = "1/2 TONELADA";
+            //conceptoparte.ValorUnitario = 1m;
             //concepto3.Parte = new ComprobanteConceptoParte[1];
-            concepto3.Parte[0] = conceptoparte;
+
+            //concepto3.Parte[0] = conceptoparte;
+
+            //conceptoTraslado3.Base = 17000;
+            //conceptoTraslado3.Impuesto = "002";
+            //conceptoTraslado3.TipoFactor = "Tasa";
+            //conceptoTraslado3.TasaOCuota = 0.160000m;
+            //conceptoTraslado3.Importe = 2720;
+
+            //conceptoretencion3.Base = 17000;
+            //conceptoretencion3.Importe = 2720;
+            //conceptoretencion3.Impuesto = "002";
+            //conceptoretencion3.TasaOCuota = 0.160000m;
+            //conceptoretencion3.TipoFactor = "Tasa";
+
+
+
+
+
+            //var t3 = new List<ComprobanteConceptoImpuestosTraslado>();
+            //var r3 = new List<ComprobanteConceptoImpuestosRetencion>();
+
+            //t3.Add(conceptoTraslado3);
+            //r3.Add(conceptoretencion3);
+            //cfdiService.AddConcepto(concepto3, t3, r3);
+            cfdiService.AddConcepto(concepto3, "002", 0.160000m, 17000, 2720, "Tasa", "002", 0.160000m, 17000, 2720, "Tasa");
 
 
             //Emisor
-            var emisor = new ComprobanteEmisor();
-            emisor.Nombre = "ESCUELA KEMPER URGATE SA DE CV";
-            emisor.RegimenFiscal = "601";
-            emisor.Rfc = "EKU9003173C9";
+            cfdiService.AddEmisor("EKU9003173C9", "ESCUELA KEMPER URGATE SA DE CV", "601");
 
+            //var emisor = new ComprobanteEmisor();
+            //emisor.Nombre = "ESCUELA KEMPER URGATE SA DE CV";
+            //emisor.RegimenFiscal = "601";
+            //emisor.Rfc = "EKU9003173C9";
+
+            //cfdiService.AddEmisor(emisor);
 
             //Receptor
-            var receptor = new ComprobanteReceptor();
-            receptor.Rfc = "MEJJ940824C61";
-            receptor.Nombre = "JESUS MENDOZA JUAREZ";
-            receptor.UsoCFDI = "P01";
+            cfdiService.AddReceptor("MEJJ940824C61", "JESUS MENDOZA JUAREZ", "P01");
+            //var receptor = new ComprobanteReceptor();
+            //receptor.Rfc = "MEJJ940824C61";
+            //receptor.Nombre = "JESUS MENDOZA JUAREZ";
+            //receptor.UsoCFDI = "P01";
 
-            //Comprobante
-            var comprobante = new Comprobante();
-            var comprobanteImpuestos = new ComprobanteImpuestos();
-            var comprobanteTraslado1 = new ComprobanteImpuestosTraslado();
-            var comprobanteRetencion1 = new ComprobanteImpuestosRetencion();
-            var comprobanteRetencion2 = new ComprobanteImpuestosRetencion();
-
-            comprobanteTraslado1.Importe = 363104;
-            comprobanteTraslado1.Impuesto = "002";
-            comprobanteTraslado1.TipoFactor = "Tasa";
-            comprobanteTraslado1.TasaOCuota = 0.160000m;
-
-            comprobanteRetencion1.Impuesto = "002";
-            comprobanteRetencion1.Importe = 2720;
-
-            comprobanteRetencion2.Impuesto = "003";
-            comprobanteRetencion2.Importe = 1193772;
-
-            comprobante.Fecha = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
-            comprobante.Sello = "MiCadenaDeSello";
-            comprobante.NoCertificado = certificado.CertificateNumber();
-            comprobante.Certificado = certificado.CertificateBase64();
-            comprobante.SubTotal = 2269400;
-            comprobante.Moneda = "MXN";
-            comprobante.Total = 1436012;
-            comprobante.TipoDeComprobante = "I";
-            comprobante.LugarExpedicion = "38020";
-            comprobante.TipoDeComprobante = "I";
-            comprobante.Serie = "F";
-            comprobante.FormaPago = "01";
-            comprobante.MetodoPago = "PUE";
-
-            comprobante.Emisor = emisor;
-            comprobante.Receptor = receptor;
-
-            comprobante.Conceptos = new ComprobanteConcepto[3];
-            comprobante.Conceptos[0] = concepto1;
-            comprobante.Conceptos[1] = concepto2;
-            comprobante.Conceptos[2] = concepto3;
-
-            comprobanteImpuestos = new ComprobanteImpuestos();
-            comprobanteImpuestos.Traslados = new ComprobanteImpuestosTraslado[1];
-            comprobanteImpuestos.Retenciones = new ComprobanteImpuestosRetencion[2];
-            comprobanteImpuestos.Traslados[0] = comprobanteTraslado1;
-            comprobanteImpuestos.Retenciones[0] = comprobanteRetencion1;
-            comprobanteImpuestos.Retenciones[1] = comprobanteRetencion2;
-            comprobanteImpuestos.TotalImpuestosRetenidos = 1196492;
-            comprobanteImpuestos.TotalImpuestosTrasladados = 363104;
-            comprobanteImpuestos.TotalImpuestosTrasladadosSpecified = true;
-            comprobanteImpuestos.TotalImpuestosRetenidosSpecified = true;
-            comprobante.Impuestos = comprobanteImpuestos;
+            //cfdiService.AddReceptor(receptor);
 
 
 
 
-            comprobante = cfdiService.CalculaComprobante(comprobante);
+            cfdiService.Comprobante = cfdiService.CalculaComprobante();
 
             //Sellar  
-            cfdiService.SaveToXml(comprobante, "FacturaXML.XML");
-            comprobante.Sello = fiel.PrivateKey.GenerateSignature(cadenaO.GetOriginalString("FacturaXML.XML"));
+            cfdiService.SaveToXml(cfdiService.Comprobante, "FacturaXML.XML");
+            cfdiService.Comprobante.Sello = fiel.PrivateKey.GenerateSignature(cadenaO.GetOriginalString("FacturaXML.XML"));
 
-            cfdiService.SaveToXml(comprobante, "FacturaXML.XML");
+            cfdiService.SaveToXml(cfdiService.Comprobante, "FacturaXML.XML");
 
 
 
@@ -299,7 +290,7 @@ namespace FINKOK
                         {
                             if (selloResponse.stampResult.Incidencias.Length == 0)
                             {
-                                //MessageBox.Show(selloResponse.stampResult.CodEstatus.ToString());
+
                                 //MessageBox.Show(selloResponse.stampResult.Fecha.ToString());
                                 //MessageBox.Show(selloResponse.stampResult.UUID.ToString());
                                 //MessageBox.Show(selloResponse.stampResult.xml.ToString());
@@ -308,6 +299,12 @@ namespace FINKOK
                                 File.WriteAllText("FacturaXML.XML", selloResponse.stampResult.xml);
 
                                 XMLL.Close();
+                                MessageBox.Show(selloResponse.stampResult.CodEstatus.ToString());
+                            }
+                            else
+                            {
+                                MessageBox.Show("No se timbro el XML" + "\nCódigo de error: " + selloResponse.stampResult.Incidencias[0].CodigoError.ToString() + "\nMensaje: " + selloResponse.stampResult.Incidencias[0].MensajeIncidencia);
+
                             }
                         }
                     }
@@ -318,7 +315,6 @@ namespace FINKOK
             }
             catch (Exception)
             {
-                MessageBox.Show("No se timbro el XML" + "\nCódigo de error: " + selloResponse.stampResult.Incidencias[0].CodigoError.ToString() + "\nMensaje: " + selloResponse.stampResult.Incidencias[0].MensajeIncidencia);
 
             }
 

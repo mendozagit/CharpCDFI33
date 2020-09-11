@@ -18,14 +18,14 @@ namespace Mensoft.Facturacion.CFDI33
         private XmlReader xmlReader;
 
         //Comprobante 
-        private Comprobante comprobante;
+        public Comprobante Comprobante;
         private List<ComprobanteImpuestosTraslado> comprobanteTraslados;
         private List<ComprobanteImpuestosRetencion> comprobanteRetenciones;
 
         //Concepto
         private List<ComprobanteConcepto> conceptos;
         private ComprobanteConceptoImpuestosTraslado conceptoTraslado;
-
+        private ComprobanteConceptoImpuestosRetencion conceptoRetencion;
 
 
 
@@ -35,136 +35,230 @@ namespace Mensoft.Facturacion.CFDI33
 
         public CfdiService(string tipoDeComprobante, string version)
         {
-            namespaces = new XmlSerializerNamespaces();
-            namespaces.Add("cfdi", "http://www.sat.gob.mx/cfd/3");
-            namespaces.Add("xsi", "http://www.w3.org/2001/XMLSchema-instance");
-            comprobante = new Comprobante { Version = version, TipoDeComprobante = tipoDeComprobante };
-
-            conceptos = new List<ComprobanteConcepto>();
-
-
             comprobanteTraslados = new List<ComprobanteImpuestosTraslado>();
             comprobanteRetenciones = new List<ComprobanteImpuestosRetencion>();
+            namespaces = new XmlSerializerNamespaces();
+            conceptos = new List<ComprobanteConcepto>();
+            namespaces.Add("cfdi", "http://www.sat.gob.mx/cfd/3");
+            namespaces.Add("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            Comprobante = new Comprobante { Version = version, TipoDeComprobante = tipoDeComprobante };
         }
-
-
         #endregion
 
 
 
 
-
+        /// <summary>
+        /// Emisor del comprobante
+        /// </summary>
+        /// <param name="pEmisor"></param>
         public void AddEmisor(ComprobanteEmisor pEmisor)
         {
             if (pEmisor != null)
             {
-                comprobante.Emisor = pEmisor;
+                Comprobante.Emisor = pEmisor;
             }
         }
+        /// <summary>
+        /// Emisor del comprobante
+        /// </summary>
+        /// <param name="rfc"></param>
+        /// <param name="razonSocial"></param>
+        /// <param name="claveRegimenFiscal"></param>
+        public void AddEmisor(string rfc, string razonSocial, string claveRegimenFiscal)
+        {
+            Comprobante.Emisor = new ComprobanteEmisor();
+            Comprobante.Emisor.Rfc = rfc;
+            Comprobante.Emisor.Nombre = razonSocial;
+            Comprobante.Emisor.RegimenFiscal = claveRegimenFiscal;
+
+        }
+
+
+
+        /// <summary>
+        /// Receptor del comprobante
+        /// </summary>
+        /// <param name="pReceptor"></param>
         public void AddReceptor(ComprobanteReceptor pReceptor)
         {
             if (pReceptor != null)
             {
-                comprobante.Receptor = pReceptor;
+                Comprobante.Receptor = pReceptor;
             }
         }
-
-        public void AddConcepto(ComprobanteConcepto pconcepto, List<ComprobanteConceptoImpuestosTraslado> traslados = null, List<ComprobanteConceptoImpuestosRetencion> retenciones = null)
+        /// <summary>
+        /// Receptor del comprobante
+        /// </summary>
+        /// <param name="rfc"></param>
+        /// <param name="razonSocial"></param>
+        /// <param name="claveUsoCfdi"></param>
+        public void AddReceptor(string rfc, string razonSocial, string claveUsoCfdi)
         {
+
+            Comprobante.Receptor = new ComprobanteReceptor();
+            Comprobante.Receptor.Rfc = rfc;
+            Comprobante.Receptor.Nombre = razonSocial;
+            Comprobante.Receptor.UsoCFDI = claveUsoCfdi;
+        }
+
+        /// <summary>
+        /// Agrega el concepto con sus respectivas colecciones de impuestos
+        /// cuando ambas colecciones toman valor null por defecto, entonces
+        /// el concepto se grava excento
+        /// </summary>
+        /// <param name="pconcepto"> Concepto</param>
+        /// <param name="traslados"> Impuestos trasladados</param>
+        /// <param name="retenciones">Impuestos retenidos </param>
+        public void AddConcepto(ComprobanteConcepto pconcepto,
+            List<ComprobanteConceptoImpuestosTraslado> traslados = null,
+            List<ComprobanteConceptoImpuestosRetencion> retenciones = null)
+        {
+            pconcepto.Impuestos = new ComprobanteConceptoImpuestos();
+
             if (traslados == null)
             {
-                // Concepto excento
-                conceptoTraslado = new ComprobanteConceptoImpuestosTraslado
+                if (retenciones == null)
                 {
-                    Base = pconcepto.Cantidad * pconcepto.ValorUnitario,
-                    Impuesto = CfdiHelper.ImpuestoEstandar,
-                    TipoFactor = CfdiHelper.TipoFactorEstandar
-                };
-                pconcepto.Impuestos.Traslados = new ComprobanteConceptoImpuestosTraslado[1];
-                pconcepto.Impuestos.Traslados[0] = conceptoTraslado;
-                conceptos.Add(pconcepto);
+                    // Concepto excento
+                    conceptoTraslado = new ComprobanteConceptoImpuestosTraslado
+                    {
+                        Base = pconcepto.Cantidad * pconcepto.ValorUnitario,
+                        Impuesto = CfdiHelper.ImpuestoEstandar,
+                        TipoFactor = CfdiHelper.TipoFactorEstandar
+                    };
+                    pconcepto.Impuestos.Traslados = new ComprobanteConceptoImpuestosTraslado[1];
+                    pconcepto.Impuestos.Traslados[0] = conceptoTraslado;
+                    conceptos.Add(pconcepto);
+                }
+                else
+                {
+                    //Una o varias retenciones
+                    pconcepto.Impuestos.Retenciones = retenciones.ToArray();
+                    conceptos.Add(pconcepto);
+                }
             }
             else
             {
-                /*Uno o varios impuestos*/
-                pconcepto.Impuestos.Traslados = traslados.ToArray();
-                conceptos.Add(pconcepto);
+                if (retenciones == null)
+                {
+                    //Uno o varios traslados
+                    pconcepto.Impuestos.Traslados = traslados.ToArray();
+                    conceptos.Add(pconcepto);
+                }
+                else
+                {
+                    //Una o varias retenciones y Uno o varios traslados
+                    pconcepto.Impuestos.Retenciones = retenciones.ToArray();
+                    pconcepto.Impuestos.Traslados = traslados.ToArray();
+                    conceptos.Add(pconcepto);
+                }
             }
-
-            if (retenciones == null) return;
-            pconcepto.Impuestos.Retenciones = retenciones.ToArray();
-            conceptos.Add(pconcepto);
-
         }
 
-        public Comprobante CalculaComprobante(Comprobante pComprobante)
+        /// <summary>
+        /// Agrega el concepto y su respectivo impuesto trasladado
+        /// Este metodo solo debe ser llamado cuendo el concepto tenga
+        /// Uno y solo un impuesto por trasladar o retener (No excento)
+        /// </summary>
+        /// <param name="nConcepto"></param>
+        /// <param name="nImpuesto"></param>
+        /// <param name="nTasaOCuota"></param>
+        /// <param name="nBase"></param>
+        /// <param name="nImporte"></param>
+        /// <param name="nTipoFactor"></param>
+        /// <param name="isTraslado"></param>
+        public void AddConcepto(ComprobanteConcepto nConcepto, string nImpuesto, decimal nTasaOCuota, decimal nBase,
+            decimal nImporte, string nTipoFactor, bool isTraslado = true)
         {
-            this.comprobante = pComprobante;
+            nConcepto.Impuestos = new ComprobanteConceptoImpuestos();
 
-
-            #region Agrupacion de traslados
-            //Agrupacion de traslados
-            var traslados = new List<ComprobanteConceptoImpuestosTraslado>();
-
-            //Obtener todos los traslados de todos los conceptos
-            foreach (var c in pComprobante.Conceptos)
+            if (isTraslado)
             {
-                foreach (var t in c.Impuestos.Traslados.ToList())
-                {
-                    traslados.Add(t);
-                }
+                //Solo Un traslado
+                conceptoTraslado = new ComprobanteConceptoImpuestosTraslado();
+                conceptoTraslado.Impuesto = nImpuesto;
+                conceptoTraslado.TasaOCuota = nTasaOCuota;
+                conceptoTraslado.Base = nBase;
+                conceptoTraslado.Importe = nImporte;
+                conceptoTraslado.TipoFactor = nTipoFactor;
+                nConcepto.Impuestos.Traslados = new ComprobanteConceptoImpuestosTraslado[1];
+                nConcepto.Impuestos.Traslados[0] = conceptoTraslado;
+                conceptos.Add(nConcepto);
             }
-
-            //Agrupar traslados por:  Impuesto, TasaOCuota, TipoFactor
-            var trasladosAgrupados = from item in traslados
-                                     group item by new { item.Impuesto, item.TasaOCuota, item.TipoFactor }
-                into g
-                                     select new ComprobanteConceptoImpuestosTraslado()
-                                     {
-                                         Impuesto = g.Key.Impuesto,
-                                         TasaOCuota = g.Key.TasaOCuota,
-                                         TipoFactor = g.Key.TipoFactor,
-                                         Base = g.Sum(x => x.Base),
-                                         Importe = g.Sum(x => x.Importe)
-                                     };
-
-
-            var agrupados = trasladosAgrupados.ToList();
-            foreach (var trasladosAgrupado in agrupados)
+            else
             {
-                comprobanteTraslados.Add(new ComprobanteImpuestosTraslado
-                {
-                    Impuesto = trasladosAgrupado.Impuesto,
-                    TipoFactor = trasladosAgrupado.TipoFactor,
-                    TasaOCuota = trasladosAgrupado.TasaOCuota,
-                    Importe = trasladosAgrupado.Importe
-                });
+                //Solo Un traslado
+                conceptoRetencion = new ComprobanteConceptoImpuestosRetencion();
+                conceptoRetencion.Impuesto = nImpuesto;
+                conceptoRetencion.TasaOCuota = nTasaOCuota;
+                conceptoRetencion.Base = nBase;
+                conceptoRetencion.Importe = nImporte;
+                conceptoRetencion.TipoFactor = nTipoFactor;
+                nConcepto.Impuestos.Retenciones = new ComprobanteConceptoImpuestosRetencion[1];
+                nConcepto.Impuestos.Retenciones[0] = conceptoRetencion;
+                conceptos.Add(nConcepto);
             }
+        }
 
-            pComprobante.Impuestos.Traslados = comprobanteTraslados.ToArray();
-            pComprobante.Impuestos.TotalImpuestosTrasladados = agrupados.Sum(x => x.Importe);
+        /// <summary>
+        /// Agrega el concepto y su respectivo impuesto trasladado y retencion
+        /// Solo debe ser llamado cuando el concepto tenga un impuesto y una
+        /// retencion.
+        /// </summary>
+        /// <param name="nConcepto"></param>
+        /// <param name="trasladoImpuesto"></param>
+        /// <param name="trasladoTasaOCuota"></param>
+        /// <param name="trasladoBase"></param>
+        /// <param name="trasladoImporte"></param>
+        /// <param name="trasladoTipoFactor"></param>
+        /// <param name="retencionImpuesto"></param>
+        /// <param name="retencionTasaOCuota"></param>
+        /// <param name="retencionBase"></param>
+        /// <param name="retencionImporte"></param>
+        /// <param name="retencionTipoFactor"></param>
+        public void AddConcepto(ComprobanteConcepto nConcepto, string trasladoImpuesto, decimal trasladoTasaOCuota,
+            decimal trasladoBase, decimal trasladoImporte, string trasladoTipoFactor, string retencionImpuesto,
+            decimal retencionTasaOCuota, decimal retencionBase, decimal retencionImporte, string retencionTipoFactor)
+        {
+            nConcepto.Impuestos = new ComprobanteConceptoImpuestos();
 
-            if (comprobanteTraslados.Count == 0)
-                pComprobante.Impuestos.TotalImpuestosTrasladadosSpecified = false;
-            #endregion
+            //Solo Un traslado
+            conceptoTraslado = new ComprobanteConceptoImpuestosTraslado();
+            conceptoTraslado.Impuesto = trasladoImpuesto;
+            conceptoTraslado.TasaOCuota = trasladoTasaOCuota;
+            conceptoTraslado.Base = trasladoBase;
+            conceptoTraslado.Importe = trasladoImporte;
+            conceptoTraslado.TipoFactor = trasladoTipoFactor;
+            nConcepto.Impuestos.Traslados = new ComprobanteConceptoImpuestosTraslado[1];
+            nConcepto.Impuestos.Traslados[0] = conceptoTraslado;
 
+            //Solo una retencion
+            conceptoRetencion = new ComprobanteConceptoImpuestosRetencion();
+            conceptoRetencion.Impuesto = retencionImpuesto;
+            conceptoRetencion.TasaOCuota = retencionTasaOCuota;
+            conceptoRetencion.Base = retencionBase;
+            conceptoRetencion.Importe = retencionImporte;
+            conceptoRetencion.TipoFactor = retencionTipoFactor;
+            nConcepto.Impuestos.Retenciones = new ComprobanteConceptoImpuestosRetencion[1];
+            nConcepto.Impuestos.Retenciones[0] = conceptoRetencion;
 
-            #region Agrupacion de retenciones
+            conceptos.Add(nConcepto);
+        }
 
+        public Comprobante CalculaComprobante()
+        {
+            Comprobante.Conceptos = conceptos.ToArray();
+            AgrupaTraslados();
+            AgrupaRetenciones();
+            return Comprobante;
+        }
 
+        private void AgrupaRetenciones()
+        {
+            //Obtener todos las retenciones de todos los conceptos
+            var retenciones = Comprobante.Conceptos.SelectMany(c => c.Impuestos.Retenciones.ToList()).ToList();
 
-
-            //Agrupacion de retenciones
-            var retenciones = new List<ComprobanteConceptoImpuestosRetencion>();
-
-            //Obtener todos los traslados de todos los conceptos
-            foreach (var c in pComprobante.Conceptos)
-            {
-                foreach (var t in c.Impuestos.Retenciones.ToList())
-                {
-                    retenciones.Add(t);
-                }
-            }
 
             //Agrupar traslados por:  Impuesto, TasaOCuota, TipoFactor
             var retencionesAgrupados = from item in retenciones
@@ -190,14 +284,49 @@ namespace Mensoft.Facturacion.CFDI33
                 });
             }
 
-            pComprobante.Impuestos.Retenciones = comprobanteRetenciones.ToArray();
-            pComprobante.Impuestos.TotalImpuestosRetenidos = retencionesagrupadas.Sum(x => x.Importe);
+            Comprobante.Impuestos.Retenciones = comprobanteRetenciones.ToArray();
+            Comprobante.Impuestos.TotalImpuestosRetenidos = retencionesagrupadas.Sum(x => x.Importe);
 
-            if (comprobanteRetenciones.Count == 0)
-                pComprobante.Impuestos.TotalImpuestosRetenidosSpecified = false;
-            #endregion
+            if (comprobanteRetenciones.Any())
+                Comprobante.Impuestos.TotalImpuestosRetenidosSpecified = true;
+        }
 
-            return pComprobante;
+        private void AgrupaTraslados()
+        {
+            //Obtener todos los traslados de todos los conceptos
+            var traslados = Comprobante.Conceptos.SelectMany(c => c.Impuestos.Traslados.ToList()).ToList();
+
+
+            //Agrupar traslados por:  Impuesto, TasaOCuota, TipoFactor
+            var trasladosAgrupados = traslados.GroupBy(item => new { item.Impuesto, item.TasaOCuota, item.TipoFactor })
+                .Select(g => new ComprobanteConceptoImpuestosTraslado()
+                {
+                    Impuesto = g.Key.Impuesto,
+                    TasaOCuota = g.Key.TasaOCuota,
+                    TipoFactor = g.Key.TipoFactor,
+                    Base = g.Sum(x => x.Base),
+                    Importe = g.Sum(x => x.Importe)
+                });
+
+
+            var agrupados = trasladosAgrupados.ToList();
+            foreach (var trasladosAgrupado in agrupados)
+            {
+                comprobanteTraslados.Add(new ComprobanteImpuestosTraslado
+                {
+                    Impuesto = trasladosAgrupado.Impuesto,
+                    TipoFactor = trasladosAgrupado.TipoFactor,
+                    TasaOCuota = trasladosAgrupado.TasaOCuota,
+                    Importe = trasladosAgrupado.Importe
+                });
+            }
+
+            Comprobante.Impuestos = new ComprobanteImpuestos();
+            Comprobante.Impuestos.Traslados = comprobanteTraslados.ToArray();
+            Comprobante.Impuestos.TotalImpuestosTrasladados = agrupados.Sum(x => x.Importe);
+
+            if (comprobanteTraslados.Any())
+                Comprobante.Impuestos.TotalImpuestosTrasladadosSpecified = true;
         }
 
         #region Serializar - Deserializar
@@ -210,6 +339,15 @@ namespace Mensoft.Facturacion.CFDI33
             using (xmlWriter = XmlWriter.Create(path, new XmlWriterSettings { Indent = true }))
             {
                 if (xmlWriter != null) xmlSerializer.Serialize(xmlWriter, pComprobante, namespaces);
+            }
+        }
+        public void SaveToXml<T>(string path)
+        {
+            xmlSerializer = new XmlSerializer(typeof(T));
+
+            using (xmlWriter = XmlWriter.Create(path, new XmlWriterSettings { Indent = true }))
+            {
+                if (xmlWriter != null) xmlSerializer.Serialize(xmlWriter, Comprobante, namespaces);
             }
         }
 

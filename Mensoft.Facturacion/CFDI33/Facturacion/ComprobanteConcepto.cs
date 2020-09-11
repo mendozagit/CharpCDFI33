@@ -228,6 +228,7 @@
             set
             {
                 descuentoField = value;
+                descuentoFieldSpecified = true;
             }
         }
 

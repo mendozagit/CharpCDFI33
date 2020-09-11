@@ -5,20 +5,18 @@
     public partial class ComprobanteConceptoImpuestosTraslado
     {
 
-        private decimal baseField;
-
         private string impuestoField;
-
+        private decimal tasaOCuotaField;
+        private decimal baseField;
+        private decimal importeField;
         private string tipoFactorField;
 
-        private decimal tasaOCuotaField;
 
-        private bool tasaOCuotaFieldSpecified;
 
-        private decimal importeField;
+
 
         private bool importeFieldSpecified;
-
+        private bool tasaOCuotaFieldSpecified;
 
         [System.Xml.Serialization.XmlAttributeAttribute()]
         public decimal Base
