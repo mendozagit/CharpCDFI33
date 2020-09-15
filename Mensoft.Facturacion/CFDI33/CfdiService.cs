@@ -1,8 +1,12 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Xml.XPath;
 using Mensoft.Facturacion.CFDI33.Facturacion;
 using Mensoft.Facturacion.CFDI33.Helper;
 
@@ -10,12 +14,21 @@ namespace Mensoft.Facturacion.CFDI33
 {
     public class CfdiService
     {
+        private readonly int decimalesConcepto;
+        private readonly int decimalesComprobante;
 
         //Serializacion
+
         private XmlSerializerNamespaces namespaces;
+        private XPathNavigator xPathNavigator;
         private XmlSerializer xmlSerializer;
+        private XmlDocument document;
         private XmlWriter xmlWriter;
         private XmlReader xmlReader;
+        private XmlDocument xmlDocument;
+        private StreamWriter streamWriter;
+        private byte[] byteXmlDocument;
+        private string stringByteXmlDocument;
 
         //Comprobante 
         public Comprobante Comprobante;
@@ -30,18 +43,28 @@ namespace Mensoft.Facturacion.CFDI33
 
 
 
-
         #region Constructores
 
-        public CfdiService(string tipoDeComprobante, string version)
+        public CfdiService(string tipoDeComprobante, string version, int decimalesConcepto = 6, int decimalesComprobante = 2)
         {
+            this.decimalesConcepto = decimalesConcepto;
+            this.decimalesComprobante = decimalesComprobante;
             comprobanteTraslados = new List<ComprobanteImpuestosTraslado>();
             comprobanteRetenciones = new List<ComprobanteImpuestosRetencion>();
             namespaces = new XmlSerializerNamespaces();
             conceptos = new List<ComprobanteConcepto>();
+            document = new XmlDocument();
+            xPathNavigator = document.CreateNavigator();
             namespaces.Add("cfdi", "http://www.sat.gob.mx/cfd/3");
             namespaces.Add("xsi", "http://www.w3.org/2001/XMLSchema-instance");
             Comprobante = new Comprobante { Version = version, TipoDeComprobante = tipoDeComprobante };
+        }
+
+        public CfdiService()
+        {
+            document = new XmlDocument();
+            xPathNavigator = document.CreateNavigator();
+
         }
         #endregion
 
@@ -127,6 +150,7 @@ namespace Mensoft.Facturacion.CFDI33
                         Impuesto = CfdiHelper.ImpuestoEstandar,
                         TipoFactor = CfdiHelper.TipoFactorEstandar
                     };
+                    pconcepto.Importe = Math.Round(pconcepto.Cantidad * pconcepto.ValorUnitario, decimalesConcepto, MidpointRounding.AwayFromZero);
                     pconcepto.Impuestos.Traslados = new ComprobanteConceptoImpuestosTraslado[1];
                     pconcepto.Impuestos.Traslados[0] = conceptoTraslado;
                     conceptos.Add(pconcepto);
@@ -182,6 +206,7 @@ namespace Mensoft.Facturacion.CFDI33
                 conceptoTraslado.Base = nBase;
                 conceptoTraslado.Importe = nImporte;
                 conceptoTraslado.TipoFactor = nTipoFactor;
+                nConcepto.Importe = Math.Round(nConcepto.Cantidad * nConcepto.ValorUnitario, decimalesConcepto, MidpointRounding.AwayFromZero);
                 nConcepto.Impuestos.Traslados = new ComprobanteConceptoImpuestosTraslado[1];
                 nConcepto.Impuestos.Traslados[0] = conceptoTraslado;
                 conceptos.Add(nConcepto);
@@ -195,6 +220,7 @@ namespace Mensoft.Facturacion.CFDI33
                 conceptoRetencion.Base = nBase;
                 conceptoRetencion.Importe = nImporte;
                 conceptoRetencion.TipoFactor = nTipoFactor;
+                nConcepto.Importe = Math.Round(nConcepto.Cantidad * nConcepto.ValorUnitario, decimalesConcepto, MidpointRounding.AwayFromZero);
                 nConcepto.Impuestos.Retenciones = new ComprobanteConceptoImpuestosRetencion[1];
                 nConcepto.Impuestos.Retenciones[0] = conceptoRetencion;
                 conceptos.Add(nConcepto);
@@ -222,6 +248,7 @@ namespace Mensoft.Facturacion.CFDI33
             decimal retencionTasaOCuota, decimal retencionBase, decimal retencionImporte, string retencionTipoFactor)
         {
             nConcepto.Impuestos = new ComprobanteConceptoImpuestos();
+            nConcepto.Importe = Math.Round(nConcepto.Cantidad * nConcepto.ValorUnitario, decimalesConcepto, MidpointRounding.AwayFromZero);
 
             //Solo Un traslado
             conceptoTraslado = new ComprobanteConceptoImpuestosTraslado();
@@ -251,45 +278,21 @@ namespace Mensoft.Facturacion.CFDI33
             Comprobante.Conceptos = conceptos.ToArray();
             AgrupaTraslados();
             AgrupaRetenciones();
+            RedondeaComprobante();
             return Comprobante;
         }
 
-        private void AgrupaRetenciones()
+        private void RedondeaComprobante()
         {
-            //Obtener todos las retenciones de todos los conceptos
-            var retenciones = Comprobante.Conceptos.SelectMany(c => c.Impuestos.Retenciones.ToList()).ToList();
-
-
-            //Agrupar traslados por:  Impuesto, TasaOCuota, TipoFactor
-            var retencionesAgrupados = from item in retenciones
-                                       group item by new { item.Impuesto, item.TasaOCuota, item.TipoFactor }
-                into g
-                                       select new ComprobanteConceptoImpuestosRetencion()
-                                       {
-                                           Impuesto = g.Key.Impuesto,
-                                           TasaOCuota = g.Key.TasaOCuota,
-                                           TipoFactor = g.Key.TipoFactor,
-                                           Base = g.Sum(x => x.Base),
-                                           Importe = g.Sum(x => x.Importe)
-                                       };
-
-
-            var retencionesagrupadas = retencionesAgrupados.ToList();
-            foreach (var retencionAgrupada in retencionesagrupadas)
-            {
-                comprobanteRetenciones.Add(new ComprobanteImpuestosRetencion
-                {
-                    Impuesto = retencionAgrupada.Impuesto,
-                    Importe = retencionAgrupada.Importe
-                });
-            }
-
-            Comprobante.Impuestos.Retenciones = comprobanteRetenciones.ToArray();
-            Comprobante.Impuestos.TotalImpuestosRetenidos = retencionesagrupadas.Sum(x => x.Importe);
-
-            if (comprobanteRetenciones.Any())
-                Comprobante.Impuestos.TotalImpuestosRetenidosSpecified = true;
+            conceptos = Comprobante.Conceptos.ToList();
+            Comprobante.SubTotal = conceptos.Sum(x => x.Cantidad * x.ValorUnitario);
+            Comprobante.Descuento = conceptos.Sum(x => x.Descuento);
+            Comprobante.Total = Comprobante.SubTotal - Comprobante.Descuento +
+                Comprobante.Impuestos.TotalImpuestosTrasladados - Comprobante.Impuestos.TotalImpuestosRetenidos;
+            if (Comprobante.Descuento <= 0) return;
+            Comprobante.DescuentoSpecified = true;
         }
+
 
         private void AgrupaTraslados()
         {
@@ -328,6 +331,42 @@ namespace Mensoft.Facturacion.CFDI33
             if (comprobanteTraslados.Any())
                 Comprobante.Impuestos.TotalImpuestosTrasladadosSpecified = true;
         }
+        private void AgrupaRetenciones()
+        {
+            //Obtener todos las retenciones de todos los conceptos
+            var retenciones = Comprobante.Conceptos.SelectMany(c => c.Impuestos.Retenciones.ToList()).ToList();
+
+
+            //Agrupar traslados por:  Impuesto, TasaOCuota, TipoFactor
+            var retencionesAgrupados = from item in retenciones
+                                       group item by new { item.Impuesto, item.TasaOCuota, item.TipoFactor }
+                into g
+                                       select new ComprobanteConceptoImpuestosRetencion()
+                                       {
+                                           Impuesto = g.Key.Impuesto,
+                                           TasaOCuota = g.Key.TasaOCuota,
+                                           TipoFactor = g.Key.TipoFactor,
+                                           Base = g.Sum(x => x.Base),
+                                           Importe = g.Sum(x => x.Importe)
+                                       };
+
+
+            var retencionesagrupadas = retencionesAgrupados.ToList();
+            foreach (var retencionAgrupada in retencionesagrupadas)
+            {
+                comprobanteRetenciones.Add(new ComprobanteImpuestosRetencion
+                {
+                    Impuesto = retencionAgrupada.Impuesto,
+                    Importe = retencionAgrupada.Importe
+                });
+            }
+
+            Comprobante.Impuestos.Retenciones = comprobanteRetenciones.ToArray();
+            Comprobante.Impuestos.TotalImpuestosRetenidos = retencionesagrupadas.Sum(x => x.Importe);
+
+            if (comprobanteRetenciones.Any())
+                Comprobante.Impuestos.TotalImpuestosRetenidosSpecified = true;
+        }
 
         #region Serializar - Deserializar
 
@@ -338,17 +377,18 @@ namespace Mensoft.Facturacion.CFDI33
 
             using (xmlWriter = XmlWriter.Create(path, new XmlWriterSettings { Indent = true }))
             {
+
                 if (xmlWriter != null) xmlSerializer.Serialize(xmlWriter, pComprobante, namespaces);
             }
         }
-        public void SaveToXml<T>(string path)
-        {
-            xmlSerializer = new XmlSerializer(typeof(T));
 
-            using (xmlWriter = XmlWriter.Create(path, new XmlWriterSettings { Indent = true }))
+        public XmlDocument ComprobanteToXmlDocument()
+        {
+            using (var w = xPathNavigator.AppendChild())
             {
-                if (xmlWriter != null) xmlSerializer.Serialize(xmlWriter, Comprobante, namespaces);
+                xmlSerializer.Serialize(w, Comprobante, namespaces);
             }
+            return document;
         }
 
         public T LoadFromXml<T>(string path) where T : class
@@ -359,6 +399,36 @@ namespace Mensoft.Facturacion.CFDI33
             {
                 return xmlSerializer.Deserialize(xmlReader) as T;
             }
+        }
+
+        public StreamWriter CreateSoapRequest(string directoryPath = "")
+        {
+            return streamWriter = directoryPath.Equals("")
+                   ? new StreamWriter(@"C:\\Users\\" + Environment.UserName + "\\Documents\\" + "SOAP_Request.xml")
+                   : new StreamWriter(directoryPath + "SOAP_Request.xml");
+
+
+        }
+
+        public byte[] ComprobanteToBytes()
+        {
+            try
+            {
+                xmlDocument = ComprobanteToXmlDocument();
+                //Conviertes el archivo en byte
+                byteXmlDocument = Encoding.UTF8.GetBytes(xmlDocument.OuterXml);
+                //Conviertes el byte resultado en base64
+                stringByteXmlDocument = Convert.ToBase64String(byteXmlDocument);
+                //Convirtes el resultado nuevamente a byte
+                byteXmlDocument = Convert.FromBase64String(stringByteXmlDocument);
+                return byteXmlDocument;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+
         }
 
         #endregion

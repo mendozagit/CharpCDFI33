@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FINKOK.Properties {
+namespace Mensoft.Facturacion.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -27,19 +27,9 @@ namespace FINKOK.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
         [global::System.Configuration.DefaultSettingValueAttribute("https://demo-facturacion.finkok.com/servicios/soap/stamp")]
-        public string FINKOK_demo_facturacion_StampSOAP {
+        public string Mensoft_Facturacion_com_finkok_demo_facturacion_StampSOAP {
             get {
-                return ((string)(this["FINKOK_demo_facturacion_StampSOAP"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://facturacion.finkok.com/servicios/soap/validation")]
-        public string FINKOK_com_finkok_validations_ValidationSOAP {
-            get {
-                return ((string)(this["FINKOK_com_finkok_validations_ValidationSOAP"]));
+                return ((string)(this["Mensoft_Facturacion_com_finkok_demo_facturacion_StampSOAP"]));
             }
         }
     }
