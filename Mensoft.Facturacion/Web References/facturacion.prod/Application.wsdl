@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://facturacion.finkok.com/stamp" xmlns:senc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:s0="apps.services.soap.core.views" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s12enc="http://www.w3.org/2003/05/soap-encoding/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing" xmlns:s12env="http://www.w3.org/2003/05/soap-envelope/" xmlns:plink="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:senv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xop="http://www.w3.org/2004/08/xop/include" name="Application" targetNamespace="http://facturacion.finkok.com/stamp" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xs:schema elementFormDefault="qualified" targetNamespace="apps.services.soap.core.views">
+      <xs:complexType name="AcuseRecepcionCFDI">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="xml" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="UUID" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="faultstring" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Fecha" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CodEstatus" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="faultcode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="SatSeal" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Incidencias" nillable="true" type="s0:IncidenciaArray" />
+          <xs:element minOccurs="0" name="NoCertificadoSAT" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="IncidenciaArray">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Incidencia" nillable="true" type="s0:Incidencia" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="QueryPendingResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="status" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="xml" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="uuid" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="uuid_status" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="next_attempt" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="attempts" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="error" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="date" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Incidencia">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="IdIncidencia" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="RfcEmisor" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Uuid" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="CodigoError" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="WorkProcessId" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="MensajeIncidencia" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ExtraInfo" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="NoCertificadoPac" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="FechaRegistro" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="Incidencia" type="s0:Incidencia" />
+      <xs:element name="QueryPendingResult" type="s0:QueryPendingResult" />
+      <xs:element name="IncidenciaArray" type="s0:IncidenciaArray" />
+      <xs:element name="AcuseRecepcionCFDI" type="s0:AcuseRecepcionCFDI" />
+    </xs:schema>
+    <xs:schema elementFormDefault="qualified" targetNamespace="http://facturacion.finkok.com/stamp">
+      <xs:import namespace="apps.services.soap.core.views" />
+      <xs:complexType name="query_pending">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="password" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="uuid" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="query_pendingResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="query_pendingResult" nillable="true" type="s0:QueryPendingResult" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="quick_stamp">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="xml" nillable="true" type="xs:base64Binary" />
+          <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="password" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="stampResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="stampResult" nillable="true" type="s0:AcuseRecepcionCFDI" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="sign_stampResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="sign_stampResult" nillable="true" type="s0:AcuseRecepcionCFDI" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="stamp">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="xml" nillable="true" type="xs:base64Binary" />
+          <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="password" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="quick_stampResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="quick_stampResult" nillable="true" type="s0:AcuseRecepcionCFDI" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="stampedResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="stampedResult" nillable="true" type="s0:AcuseRecepcionCFDI" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="sign_stamp">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="xml" nillable="true" type="xs:base64Binary" />
+          <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="password" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="stamped">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="xml" nillable="true" type="xs:base64Binary" />
+          <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="password" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="stamped" type="tns:stamped" />
+      <xs:element name="sign_stamp" type="tns:sign_stamp" />
+      <xs:element name="stampedResponse" type="tns:stampedResponse" />
+      <xs:element name="quick_stampResponse" type="tns:quick_stampResponse" />
+      <xs:element name="stamp" type="tns:stamp" />
+      <xs:element name="sign_stampResponse" type="tns:sign_stampResponse" />
+      <xs:element name="stampResponse" type="tns:stampResponse" />
+      <xs:element name="quick_stamp" type="tns:quick_stamp" />
+      <xs:element name="query_pendingResponse" type="tns:query_pendingResponse" />
+      <xs:element name="query_pending" type="tns:query_pending" />
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="stamp">
+    <wsdl:part name="stamp" element="tns:stamp" />
+  </wsdl:message>
+  <wsdl:message name="stampResponse">
+    <wsdl:part name="stampResponse" element="tns:stampResponse" />
+  </wsdl:message>
+  <wsdl:message name="sign_stamp">
+    <wsdl:part name="sign_stamp" element="tns:sign_stamp" />
+  </wsdl:message>
+  <wsdl:message name="sign_stampResponse">
+    <wsdl:part name="sign_stampResponse" element="tns:sign_stampResponse" />
+  </wsdl:message>
+  <wsdl:message name="stamped">
+    <wsdl:part name="stamped" element="tns:stamped" />
+  </wsdl:message>
+  <wsdl:message name="stampedResponse">
+    <wsdl:part name="stampedResponse" element="tns:stampedResponse" />
+  </wsdl:message>
+  <wsdl:message name="quick_stamp">
+    <wsdl:part name="quick_stamp" element="tns:quick_stamp" />
+  </wsdl:message>
+  <wsdl:message name="quick_stampResponse">
+    <wsdl:part name="quick_stampResponse" element="tns:quick_stampResponse" />
+  </wsdl:message>
+  <wsdl:message name="query_pending">
+    <wsdl:part name="query_pending" element="tns:query_pending" />
+  </wsdl:message>
+  <wsdl:message name="query_pendingResponse">
+    <wsdl:part name="query_pendingResponse" element="tns:query_pendingResponse" />
+  </wsdl:message>
+  <wsdl:portType name="Application">
+    <wsdl:operation name="stamp" parameterOrder="stamp">
+      <wsdl:documentation>This function provides the stamping service to resellers</wsdl:documentation>
+      <wsdl:input name="stamp" message="tns:stamp" />
+      <wsdl:output name="stampResponse" message="tns:stampResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="sign_stamp" parameterOrder="sign_stamp">
+      <wsdl:documentation>This function provides the sign stamping service to resellers</wsdl:documentation>
+      <wsdl:input name="sign_stamp" message="tns:sign_stamp" />
+      <wsdl:output name="sign_stampResponse" message="tns:sign_stampResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="stamped" parameterOrder="stamped">
+      <wsdl:documentation>This function returns the stamp information of an invoice</wsdl:documentation>
+      <wsdl:input name="stamped" message="tns:stamped" />
+      <wsdl:output name="stampedResponse" message="tns:stampedResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="quick_stamp" parameterOrder="quick_stamp">
+      <wsdl:documentation>This function provides the quick stamping service to resellers</wsdl:documentation>
+      <wsdl:input name="quick_stamp" message="tns:quick_stamp" />
+      <wsdl:output name="quick_stampResponse" message="tns:quick_stampResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="query_pending" parameterOrder="query_pending">
+      <wsdl:documentation>This method returns the status of a peding buffer invoice by using an uuid</wsdl:documentation>
+      <wsdl:input name="query_pending" message="tns:query_pending" />
+      <wsdl:output name="query_pendingResponse" message="tns:query_pendingResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="Application" type="tns:Application">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="stamp">
+      <soap:operation soapAction="stamp" style="document" />
+      <wsdl:input name="stamp">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="stampResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sign_stamp">
+      <soap:operation soapAction="sign_stamp" style="document" />
+      <wsdl:input name="sign_stamp">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="sign_stampResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="stamped">
+      <soap:operation soapAction="stamped" style="document" />
+      <wsdl:input name="stamped">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="stampedResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="quick_stamp">
+      <soap:operation soapAction="quick_stamp" style="document" />
+      <wsdl:input name="quick_stamp">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="quick_stampResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="query_pending">
+      <soap:operation soapAction="query_pending" style="document" />
+      <wsdl:input name="query_pending">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="query_pendingResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="StampSOAP">
+    <wsdl:port name="Application" binding="tns:Application">
+      <soap:address location="https://facturacion.finkok.com/servicios/soap/stamp" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

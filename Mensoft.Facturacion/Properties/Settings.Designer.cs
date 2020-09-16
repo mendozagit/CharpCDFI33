@@ -26,10 +26,20 @@ namespace Mensoft.Facturacion.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://demo-facturacion.finkok.com/servicios/soap/stamp")]
-        public string Mensoft_Facturacion_com_finkok_demo_facturacion_StampSOAP {
+        [global::System.Configuration.DefaultSettingValueAttribute("https://facturacion.finkok.com/servicios/soap/stamp")]
+        public string Mensoft_Facturacion_facturacion_prod_StampSOAP {
             get {
-                return ((string)(this["Mensoft_Facturacion_com_finkok_demo_facturacion_StampSOAP"]));
+                return ((string)(this["Mensoft_Facturacion_facturacion_prod_StampSOAP"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://demo-facturacion.finkok.com/servicios/soap/stamp")]
+        public string Mensoft_Facturacion_facturacion_test_StampSOAP {
+            get {
+                return ((string)(this["Mensoft_Facturacion_facturacion_test_StampSOAP"]));
             }
         }
     }

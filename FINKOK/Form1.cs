@@ -1,5 +1,4 @@
-﻿using FINKOK.demo_facturacion;
-using Mensoft.Facturacion.CFDI33;
+﻿using Mensoft.Facturacion.CFDI33;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +7,6 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
-using FINKOK.com.finkok.validations;
 using Mensoft.Facturacion.CFDI33.Facturacion;
 using Mensoft.Facturacion.CFDI33.PAC;
 
@@ -28,7 +26,7 @@ namespace FINKOK
         {
 
 
-            var finkok = new Finkok("mendoza.git@gmail.com", "Philips@0700", false, @"C:\Users\" + Environment.UserName + "\\Documents\\");
+            var finkok = new FinkokTest("mendoza.git@gmail.com", "Philips@0700", false, @"C:\Users\" + Environment.UserName + "\\Documents\\");
             var certificado = new Certificate(@"C:\Users\PHILIPS-JESUSMENDOZA\source\repos\CharpCDFI33\FINKOK\bin\Debug\Sellos\cer.cer");
             var clavePrivada = new PrivateKey(@"C:\Users\PHILIPS-JESUSMENDOZA\source\repos\CharpCDFI33\FINKOK\bin\Debug\Sellos\key.key", "12345678a", "SHA-256withRSA");
             var cadenaO = new OriginalString(@"C:\Dympos\FacturaElectronica\Certificados\cadenaoriginal33\cadenaoriginal33.xslt");
@@ -129,14 +127,9 @@ namespace FINKOK
                             if (selloResponse.quick_stampResult.Incidencias.Length == 0)
                             {
 
-                                //MessageBox.Show(selloResponse.stampResult.Fecha.ToString());
-                                //MessageBox.Show(selloResponse.stampResult.UUID.ToString());
-                                //MessageBox.Show(selloResponse.stampResult.xml.ToString());
-                                StreamWriter XMLL = new StreamWriter(finkok.SoapRequestDirectory + "responsepruebas.xml");
-                                XMLL.Write(selloResponse.quick_stampResult.xml);
-                                //File.WriteAllText("FacturaXML.XML", selloResponse.quick_stampResult.xml);
 
-                                XMLL.Close();
+                                File.WriteAllText("FacturaXML.XML", selloResponse.quick_stampResult.xml);
+
                                 MessageBox.Show(selloResponse.quick_stampResult.CodEstatus.ToString());
                             }
                             else
@@ -163,16 +156,16 @@ namespace FINKOK
 
         private void button2_Click(object sender, EventArgs e)
         {
-            ValidationSOAP validationSoap = new ValidationSOAP();
-            com.finkok.validations.validate validate = new validate();
-            var cfdiService = new CfdiService();
-            cfdiService.Comprobante = cfdiService.LoadFromXml<Comprobante>("FacturaXML.XML");
-            validate.xml = cfdiService.ComprobanteToBytes();
-            validate.username = "mendoza.git@gmail.com";
-            validate.password = "Philips@0700";
-            var response = validationSoap.validate(validate);
+            //ValidationSOAP validationSoap = new ValidationSOAP();
+            //com.finkok.validations.validate validate = new validate();
+            //var cfdiService = new CfdiService();
+            //cfdiService.Comprobante = cfdiService.LoadFromXml<Comprobante>("FacturaXML.XML");
+            //validate.xml = cfdiService.ComprobanteToBytes();
+            //validate.username = "mendoza.git@gmail.com";
+            //validate.password = "Philips@0700";
+            //var response = validationSoap.validate(validate);
 
-            MessageBox.Show("Test");
+            //MessageBox.Show("Test");
         }
     }
 }

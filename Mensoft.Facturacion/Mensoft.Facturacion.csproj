@@ -61,7 +61,8 @@
     <Compile Include="CFDI33\CfdiService.cs" />
     <Compile Include="CFDI33\PAC\ComercioDigital.cs" />
     <Compile Include="CFDI33\PAC\Ecodex.cs" />
-    <Compile Include="CFDI33\PAC\Finkok.cs" />
+    <Compile Include="CFDI33\PAC\FinkokTest.cs" />
+    <Compile Include="CFDI33\PAC\FinkokProduction.cs" />
     <Compile Include="CFDI33\PAC\IPAC.cs" />
     <Compile Include="CFDI33\PAC\SolucionFactible.cs" />
     <Compile Include="CFDI33\PAC\SWSapien.cs" />
@@ -91,7 +92,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Web References\com.finkok.demo.facturacion\Reference.cs">
+    <Compile Include="Web References\facturacion.prod\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\facturacion.test\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
@@ -107,33 +113,53 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Web References\com.finkok.demo.facturacion\Application.wsdl" />
-    <None Include="Web References\com.finkok.demo.facturacion\get_pdfResponse.datasource">
+    <None Include="Web References\facturacion.prod\Application.wsdl" />
+    <None Include="Web References\facturacion.prod\query_pendingResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\com.finkok.demo.facturacion\get_result_asyncResponse.datasource">
+    <None Include="Web References\facturacion.prod\quick_stampResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\com.finkok.demo.facturacion\query_pendingResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\com.finkok.demo.facturacion\quick_stampResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\com.finkok.demo.facturacion\Reference.map">
+    <None Include="Web References\facturacion.prod\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Web References\com.finkok.demo.facturacion\sign_stampResponse.datasource">
+    <None Include="Web References\facturacion.prod\sign_stampResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\com.finkok.demo.facturacion\stampedResponse.datasource">
+    <None Include="Web References\facturacion.prod\stampedResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\com.finkok.demo.facturacion\stampResponse.datasource">
+    <None Include="Web References\facturacion.prod\stampResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\com.finkok.demo.facturacion\stamp_asyncResponse.datasource">
+    <None Include="Web References\facturacion.test\Application.wsdl" />
+    <None Include="Web References\facturacion.test\get_pdfResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\facturacion.test\get_result_asyncResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\facturacion.test\query_pendingResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\facturacion.test\quick_stampResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\facturacion.test\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\facturacion.test\sign_stampResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\facturacion.test\stampedResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\facturacion.test\stampResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\facturacion.test\stamp_asyncResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
   </ItemGroup>
@@ -146,14 +172,25 @@
   <ItemGroup>
     <WebReferenceUrl Include="https://demo-facturacion.finkok.com/servicios/soap/stamp.wsdl">
       <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\com.finkok.demo.facturacion\</RelPath>
+      <RelPath>Web References\facturacion.test\</RelPath>
       <UpdateFromURL>https://demo-facturacion.finkok.com/servicios/soap/stamp.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>Mensoft_Facturacion_com_finkok_demo_facturacion_StampSOAP</CachedSettingsPropName>
+      <CachedSettingsPropName>Mensoft_Facturacion_facturacion_test_StampSOAP</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="https://facturacion.finkok.com/servicios/soap/stamp.wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\facturacion.prod\</RelPath>
+      <UpdateFromURL>https://facturacion.finkok.com/servicios/soap/stamp.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>Mensoft_Facturacion_facturacion_prod_StampSOAP</CachedSettingsPropName>
     </WebReferenceUrl>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

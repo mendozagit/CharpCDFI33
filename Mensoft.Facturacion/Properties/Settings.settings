@@ -2,7 +2,10 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Mensoft.Facturacion.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="Mensoft_Facturacion_com_finkok_demo_facturacion_StampSOAP" Type="(Web Service URL)" Scope="Application">
+    <Setting Name="Mensoft_Facturacion_facturacion_prod_StampSOAP" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://facturacion.finkok.com/servicios/soap/stamp</Value>
+    </Setting>
+    <Setting Name="Mensoft_Facturacion_facturacion_test_StampSOAP" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">https://demo-facturacion.finkok.com/servicios/soap/stamp</Value>
     </Setting>
   </Settings>

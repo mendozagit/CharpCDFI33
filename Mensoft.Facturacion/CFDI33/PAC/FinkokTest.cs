@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Xml.Serialization;
-using Mensoft.Facturacion.com.finkok.demo.facturacion;
+using Mensoft.Facturacion.facturacion.test;
 
 namespace Mensoft.Facturacion.CFDI33.PAC
 {
-    public class Finkok
+    public class FinkokTest
     {
 
         private StampSOAP webService;
@@ -23,7 +18,7 @@ namespace Mensoft.Facturacion.CFDI33.PAC
         public string SoapRequestDirectory { get; set; }
 
 
-        public Finkok(string userName, string password, bool prodution, string soapRequestDirectory)
+        public FinkokTest(string userName, string password, bool prodution, string soapRequestDirectory)
         {
             webService = new StampSOAP();
             quickStamp = new quick_stamp();
