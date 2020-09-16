@@ -18,7 +18,6 @@ namespace Mensoft.Facturacion.CFDI33
         private readonly int decimalesComprobante;
 
         //Serializacion
-
         private XmlSerializerNamespaces namespaces;
         private XPathNavigator xPathNavigator;
         private XmlSerializer xmlSerializer;
@@ -40,6 +39,10 @@ namespace Mensoft.Facturacion.CFDI33
         private ComprobanteConceptoImpuestosTraslado conceptoTraslado;
         private ComprobanteConceptoImpuestosRetencion conceptoRetencion;
 
+        //Fiel
+        public Certificate Certificate;
+        public PrivateKey PrivateKey;
+        public OriginalString OriginalString;
 
 
 
@@ -285,10 +288,11 @@ namespace Mensoft.Facturacion.CFDI33
         private void RedondeaComprobante()
         {
             conceptos = Comprobante.Conceptos.ToList();
-            Comprobante.SubTotal = conceptos.Sum(x => x.Cantidad * x.ValorUnitario);
-            Comprobante.Descuento = conceptos.Sum(x => x.Descuento);
-            Comprobante.Total = Comprobante.SubTotal - Comprobante.Descuento +
-                Comprobante.Impuestos.TotalImpuestosTrasladados - Comprobante.Impuestos.TotalImpuestosRetenidos;
+            Comprobante.SubTotal = Math.Round(conceptos.Sum(x => x.Cantidad * x.ValorUnitario), decimalesComprobante, MidpointRounding.AwayFromZero);
+            Comprobante.Descuento = Math.Round(conceptos.Sum(x => x.Descuento), decimalesComprobante, MidpointRounding.AwayFromZero);
+            Comprobante.Total = Math.Round(Comprobante.SubTotal - Comprobante.Descuento +
+                Comprobante.Impuestos.TotalImpuestosTrasladados - Comprobante.Impuestos.TotalImpuestosRetenidos,
+                decimalesComprobante, MidpointRounding.AwayFromZero);
             if (Comprobante.Descuento <= 0) return;
             Comprobante.DescuentoSpecified = true;
         }
@@ -326,7 +330,7 @@ namespace Mensoft.Facturacion.CFDI33
 
             Comprobante.Impuestos = new ComprobanteImpuestos();
             Comprobante.Impuestos.Traslados = comprobanteTraslados.ToArray();
-            Comprobante.Impuestos.TotalImpuestosTrasladados = agrupados.Sum(x => x.Importe);
+            Comprobante.Impuestos.TotalImpuestosTrasladados = Math.Round(agrupados.Sum(x => x.Importe), decimalesComprobante, MidpointRounding.AwayFromZero);
 
             if (comprobanteTraslados.Any())
                 Comprobante.Impuestos.TotalImpuestosTrasladadosSpecified = true;
@@ -362,7 +366,8 @@ namespace Mensoft.Facturacion.CFDI33
             }
 
             Comprobante.Impuestos.Retenciones = comprobanteRetenciones.ToArray();
-            Comprobante.Impuestos.TotalImpuestosRetenidos = retencionesagrupadas.Sum(x => x.Importe);
+            Comprobante.Impuestos.TotalImpuestosRetenidos = Math.Round(retencionesagrupadas.Sum(x => x.Importe), decimalesComprobante, MidpointRounding.AwayFromZero);
+
 
             if (comprobanteRetenciones.Any())
                 Comprobante.Impuestos.TotalImpuestosRetenidosSpecified = true;

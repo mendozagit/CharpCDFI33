@@ -30,20 +30,20 @@ namespace FINKOK
             var certificado = new Certificate(@"C:\Users\PHILIPS-JESUSMENDOZA\source\repos\CharpCDFI33\FINKOK\bin\Debug\Sellos\cer.cer");
             var clavePrivada = new PrivateKey(@"C:\Users\PHILIPS-JESUSMENDOZA\source\repos\CharpCDFI33\FINKOK\bin\Debug\Sellos\key.key", "12345678a", "SHA-256withRSA");
             var cadenaO = new OriginalString(@"C:\Dympos\FacturaElectronica\Certificados\cadenaoriginal33\cadenaoriginal33.xslt");
-            var fiel = new Fiel(certificado, clavePrivada);
+            //  var fiel = new Fiel(certificado, clavePrivada);
+
+
+
             var cfdiService = new CfdiService("I", "3.3");
-
-
-
+            cfdiService.Certificate = certificado;
+            cfdiService.PrivateKey = clavePrivada;
+            cfdiService.OriginalString = cadenaO;
 
             cfdiService.Comprobante.Fecha = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
             cfdiService.Comprobante.Sello = "MiCadenaDeSello";
             cfdiService.Comprobante.NoCertificado = certificado.CertificateNumber();
             cfdiService.Comprobante.Certificado = certificado.CertificateBase64();
-            //cfdiService.Comprobante.SubTotal = 2269400;
             cfdiService.Comprobante.Moneda = "MXN";
-            //cfdiService.Comprobante.Descuento = 30;
-            //cfdiService.Comprobante.Total = 1436012 - 30;
             cfdiService.Comprobante.TipoDeComprobante = "I";
             cfdiService.Comprobante.LugarExpedicion = "38020";
             cfdiService.Comprobante.TipoDeComprobante = "I";
@@ -106,7 +106,7 @@ namespace FINKOK
 
             //Sellar y guardar  
             cfdiService.SaveToXml(cfdiService.Comprobante, "FacturaXML.XML");
-            cfdiService.Comprobante.Sello = fiel.PrivateKey.GenerateSignature(cadenaO.GetOriginalString("FacturaXML.XML"));
+            cfdiService.Comprobante.Sello = cfdiService.PrivateKey.GenerateSignature(cadenaO.GetOriginalString("FacturaXML.XML"));
             cfdiService.SaveToXml(cfdiService.Comprobante, "FacturaXML.XML");
 
 
